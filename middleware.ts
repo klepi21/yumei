@@ -7,8 +7,8 @@ export default withAuth(
         const isBetaUser = token?.betaAccess === true;
         const pathname = req.nextUrl.pathname;
 
-        // If authenticated but no beta access, send to waitlist
-        if (pathname.startsWith("/dream") && token && !isBetaUser) {
+        // Only redirect authenticated users who lack beta access
+        if (token && pathname.startsWith("/dream") && !isBetaUser) {
             return NextResponse.redirect(new URL("/waitlist-pending", req.url));
         }
 
@@ -16,13 +16,7 @@ export default withAuth(
     },
     {
         callbacks: {
-            authorized: ({ token }) => {
-                // Return true if token exists
-                return !!token;
-            },
-        },
-        pages: {
-            signIn: "/auth/signin",
+            authorized: ({ token }) => true, // Allow middleware to pass; client-side will handle protection
         },
     }
 );
