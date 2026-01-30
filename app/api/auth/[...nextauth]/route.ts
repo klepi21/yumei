@@ -12,8 +12,7 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
-        async signIn({ user, account, profile }) {
-            console.log('🔑 SignIn Attempt:', user.email);
+        async signIn({ user }) {
             try {
                 await dbConnect();
                 const existingUser = await User.findOne({ email: user.email });
@@ -27,8 +26,7 @@ export const authOptions: NextAuthOptions = {
                 }
                 return true;
             } catch (error) {
-                console.error("❌ SignIn Callback DB Error (Allowing sign-in to proceed):", error);
-                // Return true so the session is still created even if DB is slow
+                console.error("SignIn Error:", error);
                 return true;
             }
         },
@@ -43,7 +41,9 @@ export const authOptions: NextAuthOptions = {
             }
             return session;
         },
-        async jwt({ token, user, trigger, session }) {
+        async jwt({ token, user }) {
+            if (user) token.id = user.id;
+
             if (token.email) {
                 try {
                     await dbConnect();
@@ -52,10 +52,9 @@ export const authOptions: NextAuthOptions = {
                         token.betaAccess = dbUser.betaAccess;
                         token.credits = dbUser.credits || 0;
                         token.id = dbUser._id.toString();
-                        console.log('🎫 JWT Updated for:', token.email, 'Access:', token.betaAccess);
                     }
                 } catch (error) {
-                    console.error("❌ JWT Callback Error:", error);
+                    console.error("JWT Sync Error:", error);
                 }
             }
             return token;
@@ -64,7 +63,6 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: '/auth/signin',
     },
-    debug: true,
     secret: process.env.NEXTAUTH_SECRET,
 };
 
