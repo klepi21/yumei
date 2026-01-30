@@ -13,36 +13,33 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         async signIn({ user, account, profile }) {
+            console.log('🔑 SignIn Attempt:', user.email);
             try {
                 await dbConnect();
+                console.log('✅ DB Connected in SignIn');
 
                 const existingUser = await User.findOne({ email: user.email });
+                console.log('👤 User found in DB:', !!existingUser);
 
                 if (!existingUser) {
-                    await User.create({
+                    const newUser = await User.create({
                         name: user.name,
                         email: user.email,
                         image: user.image,
                         betaAccess: false,
                     });
-                } else {
-                    // Update image if changed (optional)
-                    if (existingUser.image !== user.image) {
-                        existingUser.image = user.image;
-                        await existingUser.save();
-                    }
+                    console.log('🆕 Created new user:', newUser.email);
                 }
                 return true;
             } catch (error) {
-                console.error("Error in signIn callback:", error);
+                console.error("❌ SignIn Callback Error:", error);
                 return false;
             }
         },
         async session({ session, token }) {
-            // Pass token data to the session (client-side)
             if (session.user && token) {
                 // @ts-ignore
-                session.user.id = token.sub;
+                session.user.id = token.id || token.sub;
                 // @ts-ignore
                 session.user.betaAccess = token.betaAccess;
                 // @ts-ignore
@@ -51,7 +48,6 @@ export const authOptions: NextAuthOptions = {
             return session;
         },
         async jwt({ token, user, trigger, session }) {
-            // Initial sign in or subsequent checks
             if (token.email) {
                 try {
                     await dbConnect();
@@ -60,9 +56,10 @@ export const authOptions: NextAuthOptions = {
                         token.betaAccess = dbUser.betaAccess;
                         token.credits = dbUser.credits || 0;
                         token.id = dbUser._id.toString();
+                        console.log('🎫 JWT Updated for:', token.email, 'Access:', token.betaAccess);
                     }
                 } catch (error) {
-                    console.error("Error fetching user in JWT callback:", error);
+                    console.error("❌ JWT Callback Error:", error);
                 }
             }
             return token;
