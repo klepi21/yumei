@@ -22,11 +22,11 @@ export default function WaitlistPending() {
                     </div>
                     <h1 className="text-4xl font-black tracking-tighter uppercase leading-none text-center">
                         YUMEI<br />
-                        <span className="text-muted-foreground/50">SYSTEM // PENDING</span>
+                        <span className="text-muted-foreground/50">WAITLIST // QUEUE</span>
                     </h1>
                     <div className="mt-4 flex items-center gap-2 text-xs font-mono text-muted-foreground bg-muted/30 px-3 py-1.5 rounded-full border border-border">
                         <Timer className="w-3 h-3 animate-pulse" />
-                        <span>AUTH.QUEUE.V3.1</span>
+                        <span>FULL.ACCESS.PENDING</span>
                     </div>
                 </div>
 
@@ -39,15 +39,15 @@ export default function WaitlistPending() {
                         <div className="text-center space-y-4">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 border border-amber-200 text-amber-700 text-[10px] font-bold uppercase tracking-widest">
                                 <ShieldAlert className="w-3 h-3" />
-                                Access Restricted
+                                Clearance Required
                             </div>
 
                             <h2 className="text-2xl font-black uppercase tracking-tight leading-tight">
-                                Neural Gateway <br /> Is Currently Saturated
+                                Quota Limit Reached <br /> For Global Access
                             </h2>
 
                             <p className="text-xs font-mono text-muted-foreground leading-relaxed uppercase">
-                                Your account is successfully registered, but the YUMEI beta nodes are at capacity. We are admitting users in sequential waves to ensure engine stability.
+                                You are officially enrolled in the waiting list for **FULL NEURAL CLEARANCE**. We are granting comprehensive engine access in sequential waves to maintain system integrity.
                             </p>
                         </div>
 
