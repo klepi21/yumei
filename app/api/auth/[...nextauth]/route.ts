@@ -71,6 +71,7 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: '/auth/signin',
     },
+    debug: process.env.NODE_ENV === 'development' || true, // Enable for now to debug production
     secret: process.env.NEXTAUTH_SECRET,
 };
 
