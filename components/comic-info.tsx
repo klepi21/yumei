@@ -34,6 +34,12 @@ export default function ComicInfo({ dream }: ComicInfoProps) {
         }
     };
 
+    const handleShare = () => {
+        const url = `${window.location.origin}/dream/${dream.id || (dream as any)._id}`;
+        navigator.clipboard.writeText(url);
+        alert('Share link copied to clipboard! 🚀');
+    };
+
     return (
         <div className="bg-card text-card-foreground rounded-[2rem] border-2 border-border p-6 shadow-sm space-y-6">
 
@@ -45,7 +51,7 @@ export default function ComicInfo({ dream }: ComicInfoProps) {
                         GENERATION COMPLETE
                     </span>
                 </div>
-                <span className="text-[10px] font-mono opacity-50">ID: {(dream?.id || 'UNKNOWN').slice(0, 8).toUpperCase()}</span>
+                <span className="text-[10px] font-mono opacity-50">ID: {(dream?.id || (dream as any)._id || 'UNKNOWN').slice(0, 8).toUpperCase()}</span>
             </div>
 
             {/* Main Title / Sanitized Prompt */}
@@ -103,7 +109,7 @@ export default function ComicInfo({ dream }: ComicInfoProps) {
                 <Button onClick={handleSave} className="flex-1 rounded-xl font-bold bg-foreground text-background hover:bg-foreground/90 h-10">
                     <Download className="w-4 h-4 mr-2" /> SAVE
                 </Button>
-                <Button variant="outline" className="flex-1 rounded-xl font-bold border-2 h-10">
+                <Button onClick={handleShare} variant="outline" className="flex-1 rounded-xl font-bold border-2 h-10 hover:bg-muted/50">
                     <Share2 className="w-4 h-4 mr-2" /> SHARE
                 </Button>
             </div>

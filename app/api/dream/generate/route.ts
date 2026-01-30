@@ -196,7 +196,34 @@ export async function POST(req: Request) {
             }, { status: 400 });
         }
 
-        // 3. Save to MongoDB
+        // --- NEW: PERSIST TO UPLOADTHING ---
+        let persistentImageUrl = comicResult.imageUrl;
+        try {
+            console.log('☁️ Uploading image to permanent storage (UploadThing)...');
+            const { UTApi } = await import('uploadthing/server');
+            const utapi = new UTApi();
+
+            // Fetch the image from Together.ai
+            const imageRes = await fetch(comicResult.imageUrl);
+            const imageBlob = await imageRes.blob();
+
+            // Create a pseudo-file for UploadThing
+            const file = new File([imageBlob], `dream-${Date.now()}.png`, { type: 'image/png' });
+
+            const uploadResult = await utapi.uploadFiles(file);
+
+            if (uploadResult.data?.url) {
+                persistentImageUrl = uploadResult.data.url;
+                console.log('✅ Permanent storage upload successful:', persistentImageUrl);
+            } else {
+                console.warn('⚠️ UploadThing returned no URL, using temporary URL:', uploadResult.error);
+            }
+        } catch (uploadError) {
+            console.error('❌ Failed to upload to UploadThing:', uploadError);
+            // Fallback to the temporary URL (so the user at least sees the result)
+        }
+        // ------------------------------------
+
         // 3. Save to MongoDB
         let newDream;
         try {
@@ -206,7 +233,7 @@ export async function POST(req: Request) {
                 input: dream,
                 interpretedNarrative: narrative,
                 style: style,
-                comicImageUrl: comicResult.imageUrl,
+                comicImageUrl: persistentImageUrl, // Use the persistent URL
                 sanitizedDream: sanitizedDream,
                 panelCount: panelCount,
                 imagePrompt: comicResult.prompt,

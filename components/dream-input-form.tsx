@@ -20,6 +20,19 @@ export default function DreamInputForm({ onDreamGenerated }: DreamInputFormProps
     const router = useRouter();
     const { data: session } = useSession();
     const [loading, setLoading] = useState(false);
+    const [loadingMessage, setLoadingMessage] = useState('INITIALIZING ENGINE...');
+
+    const LOADING_MESSAGES = [
+        'ANALYZING SUBCONSCIOUS...',
+        'SANITIZING NEURAL INPUT...',
+        'DRAFTING COMIC LAYOUT...',
+        'SYNTHESIZING PANEL 1: ESTABLISHING...',
+        'SYNTHESIZING PANEL 2: CONFLICT...',
+        'SYNTHESIZING PANEL 3: IMPACT...',
+        'INKING TEXTURES & LIGHTING...',
+        'FINALIZING SEQUENTIAL ART...',
+        'DECODING IMAGE STREAM...'
+    ];
     const [error, setError] = useState('');
     const [status, setStatus] = useState({ canGenerate: true, remaining: 1, isPro: false });
 
@@ -45,7 +58,15 @@ export default function DreamInputForm({ onDreamGenerated }: DreamInputFormProps
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+        setLoadingMessage(LOADING_MESSAGES[0]);
         setError('');
+
+        // Cycle through messages while generating
+        let messageIndex = 0;
+        const interval = setInterval(() => {
+            messageIndex = (messageIndex + 1) % LOADING_MESSAGES.length;
+            setLoadingMessage(LOADING_MESSAGES[messageIndex]);
+        }, 3500);
 
         try {
             const res = await fetch('/api/dream/generate', {
@@ -57,6 +78,7 @@ export default function DreamInputForm({ onDreamGenerated }: DreamInputFormProps
             });
 
             const data = await res.json();
+            clearInterval(interval);
 
             if (!res.ok) {
                 const statusRes = await fetch('/api/user/status');
@@ -185,7 +207,7 @@ export default function DreamInputForm({ onDreamGenerated }: DreamInputFormProps
                         {loading ? (
                             <div className="flex items-center gap-2">
                                 <Loader2 className="w-5 h-5 animate-spin" />
-                                <span>PROCESSING...</span>
+                                <span>{loadingMessage}</span>
                             </div>
                         ) : !status.canGenerate ? (
                             <span>LOCKED</span>
