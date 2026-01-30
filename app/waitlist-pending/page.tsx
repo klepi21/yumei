@@ -10,7 +10,7 @@ export default function WaitlistPending() {
         <div className="min-h-screen bg-background flex items-center justify-center p-4 font-sans selection:bg-primary selection:text-primary-foreground relative overflow-hidden">
 
             {/* Background Decal */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[25vw] font-black text-muted-foreground/5 select-none leading-none z-0">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[25vw] font-black text-black/[0.03] dark:text-white/[0.03] select-none leading-none -z-10 pointer-events-none">
                 LOCKED
             </div>
 
