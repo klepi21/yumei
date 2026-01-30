@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { signOut } from 'next-auth/react';
-import { Home, Calendar, Settings, LogOut, Terminal, Cpu, Ghost } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
+import { Home, Calendar, Settings, LogOut, Terminal, Cpu, Ghost, Loader2 } from 'lucide-react';
 import SubscriptionCard from '@/components/dashboard/subscription-card';
 
 export default function DreamLayout({
@@ -12,6 +12,32 @@ export default function DreamLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const { data: session, status } = useSession();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (status === 'unauthenticated') {
+            router.push('/auth/signin');
+        } else if (status === 'authenticated' && !(session?.user as any)?.betaAccess) {
+            router.push('/waitlist-pending');
+        }
+    }, [status, session, router]);
+
+    // Show loading state while checking authentication
+    if (status === 'loading') {
+        return (
+            <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+                <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
+                <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest animate-pulse">Initializing Neural Bridge...</p>
+            </div>
+        );
+    }
+
+    // Don't render anything if we're unauthorized (the useEffect handles the redirect)
+    if (status === 'unauthenticated' || (status === 'authenticated' && !(session?.user as any)?.betaAccess)) {
+        return null;
+    }
+
     return (
         <div className="min-h-screen bg-background text-foreground font-sans flex selection:bg-primary selection:text-primary-foreground">
             {/* --- SIDEBAR (Desktop) --- */}
