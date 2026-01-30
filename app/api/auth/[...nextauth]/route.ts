@@ -16,24 +16,20 @@ export const authOptions: NextAuthOptions = {
             console.log('🔑 SignIn Attempt:', user.email);
             try {
                 await dbConnect();
-                console.log('✅ DB Connected in SignIn');
-
                 const existingUser = await User.findOne({ email: user.email });
-                console.log('👤 User found in DB:', !!existingUser);
-
                 if (!existingUser) {
-                    const newUser = await User.create({
+                    await User.create({
                         name: user.name,
                         email: user.email,
                         image: user.image,
                         betaAccess: false,
                     });
-                    console.log('🆕 Created new user:', newUser.email);
                 }
                 return true;
             } catch (error) {
-                console.error("❌ SignIn Callback Error:", error);
-                return false;
+                console.error("❌ SignIn Callback DB Error (Allowing sign-in to proceed):", error);
+                // Return true so the session is still created even if DB is slow
+                return true;
             }
         },
         async session({ session, token }) {
@@ -68,7 +64,8 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: '/auth/signin',
     },
-    debug: process.env.NODE_ENV === 'development' || true, // Enable for now to debug production
+    trustHost: true,
+    debug: true,
     secret: process.env.NEXTAUTH_SECRET,
 };
 
