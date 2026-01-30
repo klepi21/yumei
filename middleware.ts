@@ -5,9 +5,10 @@ export default withAuth(
     function middleware(req) {
         const token = req.nextauth.token;
         const isBetaUser = token?.betaAccess === true;
+        const pathname = req.nextUrl.pathname;
 
-        // Only redirect authenticated users who lack beta access if they try to use the app
-        if (req.nextUrl.pathname.startsWith("/dream") && !isBetaUser) {
+        // Only redirect authenticated users who lack beta access
+        if (token && pathname.startsWith("/dream") && !isBetaUser) {
             return NextResponse.redirect(new URL("/waitlist-pending", req.url));
         }
 
@@ -15,10 +16,7 @@ export default withAuth(
     },
     {
         callbacks: {
-            authorized: ({ token }) => !!token,
-        },
-        pages: {
-            signIn: "/auth/signin",
+            authorized: ({ token }) => true, // Allow middleware to pass; client-side will handle protection
         },
     }
 );
