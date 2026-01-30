@@ -48,8 +48,18 @@ export default function Home() {
         <div
           className="md:col-span-2 lg:col-span-2 row-span-2 bg-[#A34941] text-white rounded-[2rem] p-8 flex flex-col justify-between relative overflow-hidden group border-2 border-white/10 shadow-xl"
         >
+          {/* Background Comic Layer */}
+          <div className="absolute inset-0 z-0 opacity-20 grayscale group-hover:grayscale-0 group-hover:opacity-40 transition-all duration-700">
+            <img
+              src="/examples/example1.png"
+              alt="Comic background"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#A34941] via-[#A34941]/50 to-transparent" />
+          </div>
+
           {/* Decorative Kanji/Tech */}
-          <div className="absolute top-6 right-6 flex flex-col items-end opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity">
+          <div className="absolute top-6 right-6 flex flex-col items-end opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity z-10">
             <span className="text-6xl font-black writing-vertical-rl text-black">夢想</span>
             <span className="text-xs font-mono mt-2 border border-white/40 p-1">TS-26</span>
           </div>
@@ -78,21 +88,31 @@ export default function Home() {
 
         {/* 2. JOURNAL / HISTORY (Solid Cyber Orange) */}
         <div
-          className="md:col-span-1 row-span-2 bg-[#E0A15E] text-black rounded-[2rem] p-7 flex flex-col relative group border-2 border-black/10 shadow-lg hover:shadow-2xl transition-all"
+          className="md:col-span-1 row-span-2 bg-[#E0A15E] text-black rounded-[2rem] p-7 flex flex-col relative group border-2 border-black/10 shadow-lg hover:shadow-2xl transition-all overflow-hidden"
         >
+          {/* Background Comic Layer */}
+          <div className="absolute inset-0 z-0 opacity-10 grayscale group-hover:grayscale-0 group-hover:opacity-30 transition-all duration-700">
+            <img
+              src="/examples/example2.jpg"
+              alt="Comic background"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#E0A15E]/80 via-transparent to-[#E0A15E]" />
+          </div>
+
           {/* Decor */}
-          <div className="absolute top-4 right-4 w-12 h-12 border-2 border-dashed border-black/20 rounded-full flex items-center justify-center animate-spin-slow">
+          <div className="absolute top-4 right-4 w-12 h-12 border-2 border-dashed border-black/20 rounded-full flex items-center justify-center animate-spin-slow z-10">
             <Plus className="w-4 h-4 opacity-50" />
           </div>
 
-          <div className="flex-1 mt-4">
+          <div className="flex-1 mt-4 relative z-10">
             <div className="w-16 h-16 bg-black/10 rounded-xl flex items-center justify-center mb-6">
               <BookOpen className="w-8 h-8 opacity-80" />
             </div>
             <h2 className="text-4xl font-black tracking-tight leading-none uppercase">Dream<br />Log</h2>
           </div>
 
-          <div className="border-t-2 border-black/10 pt-4 flex justify-between items-end">
+          <div className="border-t-2 border-black/10 pt-4 flex justify-between items-end relative z-10">
             <div className="flex flex-col">
               <span className="text-[10px] font-mono font-bold opacity-60 uppercase">Records</span>
               <span className="text-2xl font-bold font-mono">128</span>
@@ -104,6 +124,7 @@ export default function Home() {
         </div>
 
         {/* 3. STATS TILE (Solid Cyber Green) */}
+        {/* ... stays solid for contrast ... */}
         <div className="bg-[#658963] text-white p-6 rounded-[2rem] border-2 border-white/10 flex flex-col justify-between hover:scale-[1.02] transition-transform shadow-lg relative overflow-hidden">
           <div className="absolute -right-4 -bottom-4 text-9xl font-black opacity-10 text-black z-0">25</div>
 
@@ -123,22 +144,42 @@ export default function Home() {
 
         {/* 4. MODE TILE (Solid Cyber Grey) */}
         <div className="bg-[#969696] text-black p-6 rounded-[2rem] flex flex-col justify-between border-2 border-black/10 relative overflow-hidden group">
-          <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 pointer-events-none" />
+          {/* Background Comic Layer */}
+          <div className="absolute inset-0 z-0 opacity-20 grayscale group-hover:grayscale-0 group-hover:opacity-40 transition-all duration-700">
+            <img
+              src="/examples/example3.jpg"
+              alt="Comic background"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/10" />
+          </div>
+
+          <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 pointer-events-none z-10" />
           {/* Sticker */}
-          <div className="absolute top-4 right-4 rotate-12 bg-[#A34941] text-white text-[10px] font-black py-1 px-3 rounded shadow-sm z-10">
+          <div className="absolute top-4 right-4 rotate-12 bg-[#A34941] text-white text-[10px] font-black py-1 px-3 rounded shadow-sm z-20">
             BETA v2
           </div>
 
-          <Globe className="w-10 h-10 opacity-70 mb-auto" />
+          <Globe className="w-10 h-10 opacity-70 mb-auto relative z-20" />
 
-          <div>
+          <div className="relative z-20">
             <h3 className="font-black text-2xl uppercase text-black">Open<br />World</h3>
             <p className="text-xs font-mono mt-1 opacity-70">Join the collective dream stream.</p>
           </div>
         </div>
 
         {/* 5. FOOTER / INFO TILE (Wide, Technical) */}
-        <div className="md:col-span-3 lg:col-span-4 bg-card text-card-foreground rounded-[2rem] p-8 flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-border relative overflow-hidden">
+        <div className="md:col-span-3 lg:col-span-4 bg-card text-card-foreground rounded-[2rem] p-8 flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-border relative overflow-hidden group">
+
+          {/* Background Comic Layer (Rotated) */}
+          <div className="absolute -right-20 -bottom-20 w-80 h-120 z-0 opacity-[0.03] group-hover:opacity-[0.08] transition-all duration-1000 rotate-12 pointer-events-none">
+            <img
+              src="/examples/example4.jpg"
+              alt="Comic background"
+              className="w-full h-full object-cover rounded-3xl shadow-2xl"
+            />
+          </div>
+
           {/* Barcode Decor */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-10 hidden md:block">
             <div className="flex items-end gap-[2px] h-8">
