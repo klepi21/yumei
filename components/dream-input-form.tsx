@@ -209,7 +209,7 @@ export default function DreamInputForm({ onDreamGenerated }: DreamInputFormProps
                             onValueChange={(val) => setFormData({ ...formData, style: val as ArtStyle })}
                             disabled={!status.canGenerate && !loading}
                         >
-                            <SelectTrigger className="bg-background border-2 border-border focus:border-primary h-12 rounded-xl">
+                            <SelectTrigger className="bg-background border-2 border-border focus:border-primary h-12 rounded-xl w-full max-w-[200px]">
                                 <SelectValue placeholder="Select style" />
                             </SelectTrigger>
                             <SelectContent className="bg-[#e5e5e5] border-2 border-black/10 text-black z-[100] opacity-100 isolate">
@@ -240,10 +240,10 @@ export default function DreamInputForm({ onDreamGenerated }: DreamInputFormProps
                     <Button
                         type="submit"
                         disabled={loading || !status.canGenerate}
-                        className={`w-full h-14 rounded-xl text-lg font-black tracking-wider uppercase transition-all
+                        className={`w-full h-16 rounded-xl text-xl font-black tracking-widest uppercase transition-all shadow-[0_4px_0_0_rgba(0,0,0,0.2)] active:shadow-none active:translate-y-1
                             ${!status.canGenerate
-                                ? 'bg-muted text-muted-foreground border-2 border-transparent'
-                                : 'bg-primary text-primary-foreground hover:bg-primary/90 border-b-4 border-black/20 active:border-b-0 active:translate-y-1'
+                                ? 'bg-muted text-muted-foreground border-2 border-transparent cursor-not-allowed opacity-50'
+                                : 'bg-primary text-primary-foreground hover:bg-primary/90 border-2 border-black/20'
                             }`}
                     >
                         {loading ? (
