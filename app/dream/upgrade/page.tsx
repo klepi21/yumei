@@ -33,10 +33,9 @@ export default function UpgradePage() {
                     </div>
 
                     <div className="flex-1 space-y-4 mb-8">
-                        <FeatureItem text="50 Neural Generations" />
-                        <FeatureItem text="Premium Aesthetic Quality" />
-                        <FeatureItem text="Permanent Cloud Storage" />
-                        <FeatureItem text="Direct Dashboard Sync" />
+                        <FeatureItem text="50 AI Generations" />
+                        <FeatureItem text="Permanent Library Access" />
+                        <FeatureItem text="Instant Result Delivery" />
                     </div>
 
                     <Button className="w-full bg-black text-white hover:bg-zinc-900 border-none font-bold rounded-xl h-12 uppercase">
@@ -59,10 +58,9 @@ export default function UpgradePage() {
                     </div>
 
                     <div className="flex-1 space-y-4 mb-8">
-                        <FeatureItem text="200 Neural Generations" />
-                        <FeatureItem text="Premium Aesthetic Quality" />
-                        <FeatureItem text="Bulk Export Capabilities" />
-                        <FeatureItem text="High-Speed Processing" />
+                        <FeatureItem text="200 AI Generations" />
+                        <FeatureItem text="Permanent Library Access" />
+                        <FeatureItem text="Instant Result Delivery" />
                     </div>
 
                     <Link href="#" className="w-full">
@@ -83,11 +81,9 @@ export default function UpgradePage() {
                     </div>
 
                     <div className="flex-1 space-y-4 mb-8">
-                        <FeatureItem text="500 Neural Generations" />
-                        <FeatureItem text="Ultimate Asset Precision" />
-                        <FeatureItem text="Commercial Usage Rights" />
-                        <FeatureItem text="VIP Server Cluster Access" />
-                        <FeatureItem text="Direct Neural Support" />
+                        <FeatureItem text="500 AI Generations" />
+                        <FeatureItem text="Permanent Library Access" />
+                        <FeatureItem text="Instant Result Delivery" />
                     </div>
 
                     <Link href="#" className="w-full">
