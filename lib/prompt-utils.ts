@@ -91,5 +91,5 @@ COMPOSITION:
 - Dynamic character poses with clear expressive acting
 - Detailed backgrounds matching the scene and mood`;
 
-    return `${systemPrompt}\n\nSTORY:\n${prompt}`;
+    return `${systemPrompt}\n\nSCRIPT:\n${prompt}`;
 }

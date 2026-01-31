@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 import { Providers } from './providers';
 
 export const metadata: Metadata = {
-  title: 'YUMEI (夢映) - Turn Dreams Into Anime Comics',
-  description: 'The world\'s first AI-powered dream journal that turns your subconscious stories into manga and anime comics.',
+  title: 'YUMEI (夢映) - Create Your AI Comics',
+  description: 'The world\'s most advanced AI-powered sequential art engine that turns your stories into manga and anime comics.',
 };
 
 export default function RootLayout({

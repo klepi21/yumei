@@ -25,7 +25,7 @@ export default function ComicInfo({ dream }: ComicInfoProps) {
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = `dream-panel-${new Date().getTime()}.png`;
+            link.download = `comic-page-${new Date().getTime()}.png`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -100,7 +100,7 @@ export default function ComicInfo({ dream }: ComicInfoProps) {
             {/* Narrative */}
             {dream.interpretedNarrative && (
                 <div className="pt-4 border-t-2 border-border border-dashed">
-                    <h3 className="text-[10px] uppercase tracking-widest text-primary font-mono mb-2">02 // NARRATIVE INTERPRETATION</h3>
+                    <h3 className="text-[10px] uppercase tracking-widest text-primary font-mono mb-2">02 // SCRIPT INTERPRETATION</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed font-mono">
                         &gt; {dream.interpretedNarrative}
                     </p>

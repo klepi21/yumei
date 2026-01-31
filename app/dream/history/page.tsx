@@ -34,8 +34,8 @@ export default function JournalPage() {
             {/* Header Area */}
             <div className="flex flex-col md:flex-row justify-between items-end mb-8 border-b border-border pb-6 gap-6">
                 <div>
-                    <h1 className="text-4xl font-black text-foreground uppercase tracking-tighter mb-2">MEMORY<br />ARCHIVE</h1>
-                    <p className="text-xs font-mono text-muted-foreground">SUB-ROUTINE: RECALL // TOTAL RECORDS: {dreams.length}</p>
+                    <h1 className="text-4xl font-black text-foreground uppercase tracking-tighter mb-2">COMIC<br />ARCHIVE</h1>
+                    <p className="text-xs font-mono text-muted-foreground">SUB-ROUTINE: STORAGE // TOTAL RECORDS: {dreams.length}</p>
                 </div>
 
                 {/* Search Bar (Styled) */}
@@ -63,7 +63,7 @@ export default function JournalPage() {
             ) : dreams.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-border rounded-3xl opacity-50">
                     <BookOpen className="w-12 h-12 mb-4 text-muted-foreground" />
-                    <p className="font-mono text-sm text-muted-foreground">ARCHIVE EMPTY</p>
+                    <p className="font-mono text-sm text-muted-foreground">LIBRARY EMPTY</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">

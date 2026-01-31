@@ -26,7 +26,7 @@ export default function DreamPage() {
                         </div>
                     </Link>
                     <div>
-                        <h1 className="text-2xl font-black uppercase tracking-tighter">DREAM // STUDIO</h1>
+                        <h1 className="text-2xl font-black uppercase tracking-tighter">COMIC // STUDIO</h1>
                         <p className="text-xs font-mono text-muted-foreground">USER: {session?.user?.name?.toUpperCase() || 'GUEST'}</p>
                     </div>
                 </div>
@@ -47,7 +47,7 @@ export default function DreamPage() {
                             <div className="absolute top-0 left-8 w-20 h-2 bg-primary/20 rounded-b-lg border-x border-b border-primary/30 z-0" />
                             <div className="absolute top-6 right-6 flex flex-col items-end opacity-20 pointer-events-none">
                                 <span className="text-4xl font-black writing-vertical-rl text-foreground">夢</span>
-                                <span className="text-[10px] font-mono mt-1 border border-foreground/30 px-1">INPUT-01</span>
+                                <span className="text-[10px] font-mono mt-1 border border-foreground/30 px-1">CORE-01</span>
                             </div>
 
                             <div className="bg-black/5 rounded-[1.8rem] p-6 md:p-10 border border-black/10 h-full relative z-10">
@@ -75,7 +75,7 @@ export default function DreamPage() {
                                 >
                                     ← RESET SEQUENCE
                                 </button>
-                                <span className="text-xs font-mono text-primary">RENDER COMPLETE</span>
+                                <span className="text-xs font-mono text-primary">COMIC READY</span>
                             </div>
                             <div className="p-1">
                                 <ComicStrip dream={dreamResult} />
@@ -95,7 +95,7 @@ export default function DreamPage() {
                             {/* DATE WIDGET (Archive -> Cyber Orange) */}
                             <div className="bg-[#E0A15E] text-black rounded-3xl p-6 border-2 border-black/10 relative overflow-hidden shadow-lg group">
                                 <span className="absolute top-4 right-4 text-[10px] font-mono opacity-50 border border-black px-1 rounded">CAL.V1</span>
-                                <h3 className="font-black text-lg mb-4 uppercase">Archive<br />Access</h3>
+                                <h3 className="font-black text-lg mb-4 uppercase">Story<br />Library</h3>
                                 <div className="bg-black/10 rounded-2xl p-2 border border-black/5">
                                     <CalendarView />
                                 </div>
@@ -118,7 +118,7 @@ export default function DreamPage() {
                             <div className="bg-[#A34941] text-white rounded-3xl p-6 border-2 border-white/10 flex items-center justify-center shadow-lg opacity-80">
                                 <div className="text-center">
                                     <Disc className="w-8 h-8 mx-auto mb-2 animate-spin-slow text-black/50" />
-                                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-black/70">System Standby...</span>
+                                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-black/70">Engine Standby...</span>
                                 </div>
                             </div>
                         </>

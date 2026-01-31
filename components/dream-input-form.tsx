@@ -24,8 +24,8 @@ export default function DreamInputForm({ onDreamGenerated }: DreamInputFormProps
     const [loadingMessage, setLoadingMessage] = useState('INITIALIZING ENGINE...');
 
     const LOADING_MESSAGES = [
-        'ANALYZING SUBCONSCIOUS...',
-        'SANITIZING NEURAL INPUT...',
+        'ANALYZING SCRIPT...',
+        'SANITIZING PROMPT...',
         'DRAFTING COMIC LAYOUT...',
         'SYNTHESIZING PANEL 1: ESTABLISHING...',
         'SYNTHESIZING PANEL 2: CONFLICT...',
@@ -110,7 +110,7 @@ export default function DreamInputForm({ onDreamGenerated }: DreamInputFormProps
         <div className="h-full flex flex-col">
             <div className="flex justify-between items-start mb-6">
                 <div>
-                    <h2 className="text-xl font-black uppercase tracking-tight text-neutral-800">DREAM PARAMETERS</h2>
+                    <h2 className="text-xl font-black uppercase tracking-tight text-neutral-800">COMIC PARAMETERS</h2>
                     <p className="text-xs font-mono text-neutral-600 mt-1">
                         Input subjective narrative data and character references.
                     </p>
@@ -134,10 +134,10 @@ export default function DreamInputForm({ onDreamGenerated }: DreamInputFormProps
 
                 {/* NARRATIVE INPUT */}
                 <div className="space-y-2 flex-1 flex flex-col">
-                    <Label htmlFor="dream" className="text-xs font-mono uppercase tracking-widest text-primary">01 // NARRATIVE DATA</Label>
+                    <Label htmlFor="dream" className="text-xs font-mono uppercase tracking-widest text-primary">01 // SCRIPT DATA</Label>
                     <Textarea
                         id="dream"
-                        placeholder="I was flying over a neon city..."
+                        placeholder="A cyberpunk detective walks into a smoke-filled bar..."
                         className="flex-1 min-h-[120px] bg-background border-2 border-border focus:border-primary text-foreground placeholder:text-muted-foreground focus:ring-0 rounded-xl resize-none p-4 text-base font-medium"
                         value={formData.dream}
                         onChange={(e) => setFormData({ ...formData, dream: e.target.value })}

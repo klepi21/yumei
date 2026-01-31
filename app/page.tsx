@@ -38,7 +38,7 @@ export default function Home() {
           </div>
           <div>
             <span className="block font-black text-2xl tracking-tighter uppercase leading-none">YUMEI // SYSTEM</span>
-            <span className="text-[10px] font-mono text-muted-foreground tracking-widest pl-0.5">DREAM TO COMIC ENGINE</span>
+            <span className="text-[10px] font-mono text-muted-foreground tracking-widest pl-0.5">AI COMIC ENGINE</span>
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -73,14 +73,14 @@ export default function Home() {
 
           <div className="space-y-4 relative z-10 mt-4">
             <div className="inline-block px-3 py-1 rounded border border-white/30 bg-black/10 text-xs font-mono font-bold tracking-widest mb-2">
-              PROJECT: DREAM
+              AI COMIC GENERATOR
             </div>
             {/* VALUE PROPOSITION UPDATE */}
             <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.85]">
-              DREAM<br />TO<br />COMIC
+              SCRIPT<br />TO<br />COMIC
             </h1>
             <p className="font-mono text-sm opacity-80 max-w-sm mt-2">
-              Turn your subconscious into manga panels instantly.
+              Turn your stories into manga panels instantly.
             </p>
           </div>
 
@@ -116,7 +116,7 @@ export default function Home() {
             <div className="w-16 h-16 bg-black/10 rounded-xl flex items-center justify-center mb-6">
               <BookOpen className="w-8 h-8 opacity-80" />
             </div>
-            <h2 className="text-4xl font-black tracking-tight leading-none uppercase">Dream<br />Log</h2>
+            <h2 className="text-4xl font-black tracking-tight leading-none uppercase">Genesis<br />Library</h2>
           </div>
 
           <div className="border-t-2 border-black/10 pt-4 flex justify-between items-end relative z-10">
@@ -171,7 +171,7 @@ export default function Home() {
 
           <div className="relative z-20">
             <h3 className="font-black text-2xl uppercase text-black">Open<br />World</h3>
-            <p className="text-xs font-mono mt-1 opacity-70">Join the collective dream stream.</p>
+            <p className="text-xs font-mono mt-1 opacity-70">Join the collective story stream.</p>
           </div>
         </div>
 
@@ -199,7 +199,7 @@ export default function Home() {
           <div className="flex items-center gap-4 z-10">
             <Disc className="w-8 h-8 animate-spin-slow text-muted-foreground" />
             <div>
-              <p className="text-xs font-mono font-bold uppercase tracking-widest text-muted-foreground">YUMEI DREAM SYSTEMS © 2026</p>
+              <p className="text-xs font-mono font-bold uppercase tracking-widest text-muted-foreground">YUMEI // COMIC SYSTEMS © 2026</p>
               <p className="text-[10px] text-muted-foreground/60">POWERED BY TOGETHER.AI FLASH-IMAGE-2.5 // ALL RIGHTS RESERVED</p>
             </div>
           </div>
