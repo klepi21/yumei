@@ -9,7 +9,11 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { COMIC_STYLES } from '@/lib/constants';
 
 
+import { UTApi } from "uploadthing/server";
+
 const together = new Together({ apiKey: process.env.TOGETHER_API_KEY });
+
+const utapi = new UTApi();
 
 // Helper to generate multi-panel comic strip using Together.ai Flash Image 2.5
 async function generateComicStrip(
@@ -105,6 +109,7 @@ COMPOSITION:
 import { buildComicPrompt } from '@/lib/prompt-utils';
 
 export async function POST(req: Request) {
+    let comicResponse: any; // Declare comicResponse outside try block
     try {
         const session = await getServerSession(authOptions);
         if (!session || !session.user) {
@@ -171,13 +176,29 @@ export async function POST(req: Request) {
 
         console.log('🎨 Generating comic with prompt:', comicPrompt.substring(0, 100) + '...');
 
-        const comicResponse = await (together.images as any).generate({
-            model: 'google/flash-image-2.5',
-            prompt: comicPrompt,
-            width: 832,
-            height: 1248,
-            reference_images: characterImages,
-        });
+        try {
+            comicResponse = await (together.images as any).generate({
+                model: 'google/flash-image-2.5',
+                prompt: comicPrompt,
+                width: 832,
+                height: 1248,
+                reference_images: characterImages,
+            });
+        } finally {
+            // CLEANUP: Delete character images from UploadThing as they are only needed for generation
+            if (characterImages.length > 0) {
+                try {
+                    // Extract keys from the URLs. Assuming URLs are like https://utfs.io/f/somekey
+                    const keys = characterImages.map((url: string) => url.split('/').pop()).filter(Boolean) as string[];
+                    if (keys.length > 0) {
+                        console.log('🧹 Cleaning up character images from UploadThing:', keys);
+                        await utapi.deleteFiles(keys);
+                    }
+                } catch (cleanupError) {
+                    console.error('⚠️ Cleanup failed:', cleanupError);
+                }
+            }
+        }
 
         const comicResult = comicResponse.data?.[0] ? {
             imageUrl: comicResponse.data[0].url,
@@ -194,9 +215,6 @@ export async function POST(req: Request) {
         let persistentImageUrl = comicResult.imageUrl;
         try {
             console.log('☁️ Uploading image to permanent storage (UploadThing)...');
-            const { UTApi } = await import('uploadthing/server');
-            const utapi = new UTApi();
-
             // Fetch the image from Together.ai
             const imageRes = await fetch(comicResult.imageUrl);
             const imageBlob = await imageRes.blob();
@@ -233,7 +251,7 @@ export async function POST(req: Request) {
                 sanitizedDream: sanitizedDream,
                 panelCount: panelCount,
                 imagePrompt: comicResult.prompt,
-                characterImages: characterImages,
+                // characterImages: characterImages, // REMOVED: Do not save temporary character refs
                 status: 'completed',
             });
             console.log('✅ Dream saved successfully:', newDream._id);
