@@ -41,7 +41,7 @@ export default function ComicInfo({ dream }: ComicInfoProps) {
     };
 
     return (
-        <div className="bg-card text-card-foreground rounded-[2rem] border-2 border-border p-6 shadow-sm space-y-6">
+        <div className="bg-white text-black rounded-[2rem] border-2 border-black p-6 shadow-sm space-y-6">
 
             {/* Status Header */}
             <div className="flex justify-between items-center border-b-2 border-border pb-4">

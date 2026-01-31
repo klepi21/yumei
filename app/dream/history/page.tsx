@@ -113,8 +113,8 @@ export default function JournalPage() {
 
             {/* Detail Modal (Bento) */}
             {selectedDream && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/90 backdrop-blur-md animate-in fade-in duration-200">
-                    <div className="bg-background border-2 border-primary rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row shadow-2xl relative">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-white border-2 border-black rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row shadow-2xl relative text-black">
 
                         {/* Modal Header Bar */}
                         <div className="absolute top-0 left-0 w-full h-10 bg-primary/10 border-b border-primary/20 flex items-center justify-between px-4 z-20 pointer-events-none md:hidden">
@@ -146,7 +146,7 @@ export default function JournalPage() {
                         </div>
 
                         {/* Info Side */}
-                        <div className="w-full md:w-2/5 p-6 md:p-10 bg-card overflow-y-auto max-h-[50vh] md:max-h-full">
+                        <div className="w-full md:w-2/5 p-6 md:p-10 bg-white overflow-y-auto max-h-[50vh] md:max-h-full">
                             <ComicInfo dream={selectedDream} />
                         </div>
                     </div>
