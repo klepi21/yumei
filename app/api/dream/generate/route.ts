@@ -171,11 +171,12 @@ export async function POST(req: Request) {
 
         console.log('🎨 Generating comic with prompt:', comicPrompt.substring(0, 100) + '...');
 
-        const comicResponse = await together.images.generate({
+        const comicResponse = await (together.images as any).generate({
             model: 'google/flash-image-2.5',
             prompt: comicPrompt,
             width: 832,
             height: 1248,
+            reference_images: characterImages,
         });
 
         const comicResult = comicResponse.data?.[0] ? {

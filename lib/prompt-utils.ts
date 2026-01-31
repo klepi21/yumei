@@ -39,23 +39,18 @@ export function buildComicPrompt({
     if (characterImages.length > 0) {
         if (characterImages.length === 1) {
             characterSection = `
-CRITICAL FACE CONSISTENCY INSTRUCTIONS:
-- REFERENCE CHARACTER: Use the uploaded image as EXACT reference for the protagonist's face and appearance
-- FACE MATCHING: The character's face must be IDENTICAL to the reference image - same eyes, nose, mouth, hair, facial structure
-- APPEARANCE PRESERVATION: Maintain exact skin tone, hair color/style, eye color, and distinctive facial features
-- CHARACTER CONSISTENCY: This exact same character must appear in ALL 5 panels with the same face throughout
-- STYLE APPLICATION: Apply ${style} comic art style to the body/pose/action but KEEP THE FACE EXACTLY AS IN THE REFERENCE IMAGE
-- NO VARIATION: Do not alter, modify, or change the character's face in any way from the reference`;
+CRITICAL FACE CONSISTENCY (IMAGE REFERENCE 1):
+- THE PROTAGONIST'S FACE MUST BE 100% IDENTICAL TO REFERENCE IMAGE 1
+- USE THE ATTACHED REFERENCE IMAGE 1 AS THE SOURCE FOR ALL FACIAL FEATURES
+- MAINTAIN EXACT EYES, NOSE, HAIR, AND FACIAL STRUCTURE FROM REFERENCE 1
+- APPLY THE ${style} STYLE TO EVERYTHING ELSE, BUT KEEP THE FACE PERFECTLY CONSISTENT`;
         } else if (characterImages.length === 2) {
             characterSection = `
-CRITICAL DUAL CHARACTER FACE CONSISTENCY INSTRUCTIONS:
-- CHARACTER 1 REFERENCE: Use the FIRST uploaded image as EXACT reference for Character 1's face and appearance
-- CHARACTER 2 REFERENCE: Use the SECOND uploaded image as EXACT reference for Character 2's face and appearance
-- FACE MATCHING: Both characters' faces must be IDENTICAL to their respective reference images
-- VISUAL DISTINCTION: Keep both characters clearly visually distinct with their unique faces, hair, and features
-- CONSISTENT PRESENCE: Both characters must appear together in at least 4 of the 5 panels
-- STYLE APPLICATION: Apply ${style} comic art style while maintaining EXACT facial features from references
-- NO FACE VARIATION: Never alter or modify either character's face from their reference images`;
+CRITICAL DUAL CHARACTER FACE CONSISTENCY:
+- CHARACTER 1: MUST MATCH REFERENCE IMAGE 1 EXACTLY
+- CHARACTER 2: MUST MATCH REFERENCE IMAGE 2 EXACTLY
+- DO NOT MIX UP THE CHARACTERS: Character 1 (from Image 1) and Character 2 (from Image 2) must remain distinct and consistent in all panels
+- APPLY THE ${style} STYLE WHILE PRESERVING THE SOURCE FACES FROM THE TWO ATTACHED IMAGES`;
         }
     }
 
