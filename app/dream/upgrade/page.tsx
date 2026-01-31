@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Check, Zap, Crown, Shield } from 'lucide-react';
+import { Check, Zap, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
@@ -10,13 +10,13 @@ export default function UpgradePage() {
         <div className="container mx-auto px-4 md:px-8 py-8 max-w-7xl">
             <div className="flex flex-col items-center text-center mb-12">
                 <div className="text-xs font-mono font-bold uppercase tracking-widest text-[#A34941] mb-2 px-3 py-1 border border-[#A34941]/30 rounded-full bg-[#A34941]/10">
-                    System Upgrade
+                    Buy Credits
                 </div>
                 <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-4">
-                    CHOOSE YOUR<br />REALITY
+                    NEED MORE<br />CREDITS?
                 </h1>
                 <p className="text-muted-foreground max-w-xl text-lg">
-                    Unlock higher cognitive functions and expanded memory banks for your dream sequences.
+                    Buy a pack to keep creating. No subscriptions, just more generations.
                 </p>
             </div>
 
