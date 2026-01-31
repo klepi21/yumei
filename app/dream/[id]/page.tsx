@@ -18,28 +18,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     if (!dream) return { title: 'Dream Not Found | Yumei' };
 
-    const siteUrl = process.env.NEXTAUTH_URL || 'https://yumei-plans.vercel.app';
+    const siteUrl = process.env.NEXTAUTH_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://yumei-plans.vercel.app');
 
     return {
         metadataBase: new URL(siteUrl),
         title: `Dream: ${dream.input.slice(0, 50)}... | Yumei`,
         description: dream.interpretedNarrative || 'A comic generated from a dream using Yumei.',
         openGraph: {
-            title: 'Yumei - Dream to Comic',
+            title: 'YUMEI - Dream to Comic',
             description: dream.input.slice(0, 100),
+            url: `${siteUrl}/dream/${id}`,
+            siteName: 'Yumei Dream System',
             images: [
                 {
                     url: dream.comicImageUrl,
                     width: 832,
                     height: 1248,
                     alt: 'Generated Comic Strip',
+                    type: 'image/png'
                 }
             ],
             type: 'article',
         },
         twitter: {
             card: 'summary_large_image',
-            title: 'Yumei - Dream to Comic',
+            title: 'YUMEI - Dream to Comic',
             description: dream.input.slice(0, 100),
             images: [dream.comicImageUrl],
         },
