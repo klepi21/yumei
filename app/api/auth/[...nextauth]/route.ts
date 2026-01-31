@@ -22,7 +22,7 @@ export const authOptions: NextAuthOptions = {
                         name: user.name,
                         email: user.email,
                         image: user.image,
-                        betaAccess: false,
+                        betaAccess: true,
                     });
                 }
                 return true;

@@ -127,21 +127,29 @@ export async function POST(req: Request) {
         const user = await User.findOne({ email: session.user.email });
         let usedCredit = false;
 
-        if (user && user.credits > 0) {
-            usedCredit = true;
-        }
-        else if (user && user.lastGenerationDate) {
-            const lastGen = new Date(user.lastGenerationDate);
-            const today = new Date();
-            const isSameDay = lastGen.getDate() === today.getDate() &&
-                lastGen.getMonth() === today.getMonth() &&
-                lastGen.getFullYear() === today.getFullYear();
+        if (user && !user.isPro) {
+            // PRIORITY 1: Use purchased credits if available
+            if (user.credits > 0) {
+                usedCredit = true;
+            }
+            // PRIORITY 2: Use daily free generation if no credits and it's a new day
+            else {
+                const lastGen = user.lastGenerationDate ? new Date(user.lastGenerationDate) : null;
+                const today = new Date();
+                const isSameDay = lastGen &&
+                    lastGen.getDate() === today.getDate() &&
+                    lastGen.getMonth() === today.getMonth() &&
+                    lastGen.getFullYear() === today.getFullYear();
 
-            if (isSameDay && !user.isPro) {
-                return NextResponse.json({
-                    error: 'Daily limit reached. Upgrade to Unlimited or buy credits!',
-                    warning: 'You have used your free daily generation.'
-                }, { status: 429 });
+                if (isSameDay) {
+                    return NextResponse.json({
+                        error: 'Daily limit reached. Buy credits for more!',
+                        warning: 'You have used your free daily generation.'
+                    }, { status: 429 });
+                }
+
+                // If it's a new day and credits are 0, we don't use a credit
+                usedCredit = false;
             }
         }
 

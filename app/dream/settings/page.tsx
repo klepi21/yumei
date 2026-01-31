@@ -35,7 +35,7 @@ export default function SettingsPage() {
                         <h2 className="text-3xl font-black uppercase tracking-tight">{session?.user?.name || 'DREAMER'}</h2>
                         <p className="text-sm font-mono opacity-80 mb-2">{session?.user?.email}</p>
                         <span className="inline-block px-3 py-1 rounded-sm bg-black text-white text-[10px] font-bold uppercase tracking-widest border border-white/20">
-                            FREE TIER AGENT
+                            {session?.user?.credits && session.user.credits > 0 ? 'CORE NEURAL AGENT' : 'TRIAL AGENT'}
                         </span>
                     </div>
 
@@ -47,30 +47,30 @@ export default function SettingsPage() {
                     </div>
                 </div>
 
-                {/* 2. BILLING / PLAN (Solid Cyber Orange) */}
+                {/* 2. BILLING / CREDITS (Solid Cyber Orange) */}
                 <div className="bg-[#E0A15E] text-black rounded-[2rem] p-8 flex flex-col justify-between relative overflow-hidden shadow-lg group">
-                    <div className="absolute top-4 right-4 animate-pulse w-3 h-3 bg-red-500 rounded-full" />
+                    <div className="absolute top-4 right-4 animate-pulse w-3 h-3 bg-[#A34941] rounded-full" />
 
                     <div>
                         <div className="flex items-center gap-2 mb-2">
                             <CreditCard className="w-5 h-5" />
-                            <h3 className="font-black text-lg uppercase">SUBSCRIPTION</h3>
+                            <h3 className="font-black text-lg uppercase">NEURAL CREDITS</h3>
                         </div>
-                        <div className="text-4xl font-black mb-1">FREE</div>
-                        <p className="text-xs font-mono font-bold opacity-60 uppercase">Starter Plan</p>
+                        <div className="text-4xl font-black mb-1">PACKS</div>
+                        <p className="text-xs font-mono font-bold opacity-60 uppercase">Instant Activation</p>
                     </div>
 
                     <div className="mt-8">
                         <div className="flex justify-between text-[10px] font-mono font-bold opacity-60 uppercase mb-1">
-                            <span>Daily Credits</span>
-                            <span>1/1 Used</span>
+                            <span>Available Balance</span>
+                            <span>{session?.user?.credits || 0} CORE</span>
                         </div>
                         <div className="w-full h-2 bg-black/10 rounded-full overflow-hidden mb-4">
-                            <div className="h-full bg-black w-full" />
+                            <div className="h-full bg-black w-2/3" />
                         </div>
                         <Link href="/dream/upgrade">
                             <Button className="w-full bg-black text-white hover:bg-zinc-800 border-none font-bold rounded-xl h-12">
-                                UPGRADE <ChevronRight className="w-4 h-4 ml-1" />
+                                BUY CREDITS <ChevronRight className="w-4 h-4 ml-1" />
                             </Button>
                         </Link>
                     </div>

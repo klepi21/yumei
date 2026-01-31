@@ -16,32 +16,38 @@ export async function GET() {
 
         const user = await User.findOne({ email: session.user.email });
 
-        let canGenerate = true;
-        let remaining = 1;
-
-        if (user && user.lastGenerationDate) {
-            const lastGen = new Date(user.lastGenerationDate);
-            const today = new Date();
-            const isSameDay = lastGen.getDate() === today.getDate() &&
-                lastGen.getMonth() === today.getMonth() &&
-                lastGen.getFullYear() === today.getFullYear();
-
-            if (isSameDay && !user.isPro) {
-                // If they have credits, they CAN generate (credits take priority)
-                if (user.credits && user.credits > 0) {
-                    canGenerate = true;
-                    remaining = user.credits;
-                } else {
-                    canGenerate = false;
-                    remaining = 0;
-                }
-            }
+        if (!user) {
+            return NextResponse.json({
+                canGenerate: true,
+                remaining: 1,
+                isPro: false,
+                credits: 0
+            });
         }
 
-        // Pro users always have access
-        if (user && user.isPro) {
+        let canGenerate = true;
+        let remaining = 0;
+
+        if (user.isPro) {
             canGenerate = true;
             remaining = 999;
+        } else {
+            // If they have credits, that's their "remaining" balance
+            if (user.credits > 0) {
+                remaining = user.credits;
+                canGenerate = true;
+            } else {
+                // Only if credit is 0 do we check the daily free gift
+                const lastGen = user.lastGenerationDate ? new Date(user.lastGenerationDate) : null;
+                const today = new Date();
+                const isSameDay = lastGen &&
+                    lastGen.getDate() === today.getDate() &&
+                    lastGen.getMonth() === today.getMonth() &&
+                    lastGen.getFullYear() === today.getFullYear();
+
+                remaining = isSameDay ? 0 : 1;
+                canGenerate = remaining > 0;
+            }
         }
 
         return NextResponse.json({

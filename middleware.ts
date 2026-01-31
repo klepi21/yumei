@@ -13,5 +13,5 @@ export default withAuth(
 );
 
 export const config = {
-    matcher: ["/dream/:path*", "/waitlist-pending"],
+    matcher: ["/dream/:path*"],
 };

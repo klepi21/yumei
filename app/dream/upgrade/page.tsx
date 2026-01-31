@@ -22,76 +22,77 @@ export default function UpgradePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                {/* 1. NEON ROOKIE (Free - Grey) */}
+                {/* 1. PULSE PACK (Small) */}
                 <div className="bg-[#969696] text-black rounded-[2rem] p-8 flex flex-col relative group border-2 border-black/10 hover:scale-[1.02] transition-transform">
                     <div className="mb-6">
-                        <h3 className="font-black text-2xl uppercase italic">NEON ROOKIE</h3>
+                        <h3 className="font-black text-2xl uppercase italic">PULSE PACK</h3>
                         <div className="flex items-baseline gap-1 mt-2">
-                            <span className="text-4xl font-black">$0</span>
-                            <span className="text-sm font-bold opacity-60">/mo</span>
+                            <span className="text-4xl font-black">$9</span>
+                            <span className="text-sm font-bold opacity-60">one-time</span>
                         </div>
                     </div>
 
                     <div className="flex-1 space-y-4 mb-8">
-                        <FeatureItem text="1 Dream per day" />
-                        <FeatureItem text="Standard Resolution" />
-                        <FeatureItem text="Public Gallery" />
+                        <FeatureItem text="50 Neural Generations" />
+                        <FeatureItem text="Premium Aesthetic Quality" />
+                        <FeatureItem text="Permanent Cloud Storage" />
+                        <FeatureItem text="Direct Dashboard Sync" />
                     </div>
 
-                    <Button disabled className="w-full bg-black/20 text-black border-2 border-black/10 font-bold rounded-xl h-12 uppercase">
-                        Current Plan
+                    <Button className="w-full bg-black text-white hover:bg-zinc-900 border-none font-bold rounded-xl h-12 uppercase">
+                        Buy Now
                     </Button>
                 </div>
 
-                {/* 2. CYBER SAMURAI (Pro - Orange) */}
+                {/* 2. SYNAPSE PACK (Medium - Highlighted) */}
                 <div className="bg-[#E0A15E] text-black rounded-[2rem] p-8 flex flex-col relative group border-2 border-black/10 shadow-xl scale-105 z-10">
                     <div className="absolute top-4 right-4 bg-black text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                        Best Value
+                        Most Popular
                     </div>
 
                     <div className="mb-6">
-                        <h3 className="font-black text-2xl uppercase italic">CYBER SAMURAI</h3>
+                        <h3 className="font-black text-2xl uppercase italic">SYNAPSE PACK</h3>
                         <div className="flex items-baseline gap-1 mt-2">
-                            <span className="text-4xl font-black">$9</span>
-                            <span className="text-sm font-bold opacity-60">/mo</span>
+                            <span className="text-4xl font-black">$29</span>
+                            <span className="text-sm font-bold opacity-60">one-time</span>
                         </div>
                     </div>
 
                     <div className="flex-1 space-y-4 mb-8">
-                        <FeatureItem text="10 Dreams per day" />
-                        <FeatureItem text="HD Resolution Panels" />
-                        <FeatureItem text="Private Gallery Mode" />
-                        <FeatureItem text="Priority Generation" />
+                        <FeatureItem text="200 Neural Generations" />
+                        <FeatureItem text="Premium Aesthetic Quality" />
+                        <FeatureItem text="Bulk Export Capabilities" />
+                        <FeatureItem text="High-Speed Processing" />
                     </div>
 
                     <Link href="#" className="w-full">
                         <Button className="w-full bg-black text-white hover:bg-zinc-900 border-none font-bold rounded-xl h-14 uppercase text-lg shadow-lg">
-                            Upgrade Now <Zap className="w-5 h-5 ml-2 fill-white" />
+                            Get Pack <Zap className="w-5 h-5 ml-2 fill-white" />
                         </Button>
                     </Link>
                 </div>
 
-                {/* 3. NETRUNNER LEGEND (Elite - Red) */}
+                {/* 3. NEURAL ENGINE (Large - Red) */}
                 <div className="bg-[#A34941] text-white rounded-[2rem] p-8 flex flex-col relative group border-2 border-white/10 hover:scale-[1.02] transition-transform">
                     <div className="mb-6">
-                        <h3 className="font-black text-2xl uppercase italic text-black">NETRUNNER</h3>
+                        <h3 className="font-black text-2xl uppercase italic text-black">NEURAL ENGINE</h3>
                         <div className="flex items-baseline gap-1 mt-2">
-                            <span className="text-4xl font-black">$19</span>
-                            <span className="text-sm font-bold opacity-80">/mo</span>
+                            <span className="text-4xl font-black">$59</span>
+                            <span className="text-sm font-bold opacity-80">one-time</span>
                         </div>
                     </div>
 
                     <div className="flex-1 space-y-4 mb-8">
-                        <FeatureItem text="Unlimited Dreams" />
-                        <FeatureItem text="4K Ultra-Res Panels" />
-                        <FeatureItem text="Commercial Rights" />
-                        <FeatureItem text="Early Access Features" />
-                        <FeatureItem text="Direct Dev Support" />
+                        <FeatureItem text="500 Neural Generations" />
+                        <FeatureItem text="Ultimate Asset Precision" />
+                        <FeatureItem text="Commercial Usage Rights" />
+                        <FeatureItem text="VIP Server Cluster Access" />
+                        <FeatureItem text="Direct Neural Support" />
                     </div>
 
                     <Link href="#" className="w-full">
                         <Button className="w-full bg-white text-black hover:bg-gray-200 border-none font-bold rounded-xl h-12 uppercase">
-                            Go Elite <Crown className="w-5 h-5 ml-2" />
+                            Go Pro <Crown className="w-5 h-5 ml-2" />
                         </Button>
                     </Link>
                 </div>
@@ -99,7 +100,7 @@ export default function UpgradePage() {
 
             <div className="mt-16 text-center">
                 <p className="text-muted-foreground text-sm font-mono">
-                    SECURED BY STRIPE // CANCEL ANYTIME // 14-DAY MONEY BACK GUARANTEE
+                    SECURED BY LEMON SQUEEZY // INSTANT NEURAL ACTIVATION
                 </p>
             </div>
         </div>

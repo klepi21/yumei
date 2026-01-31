@@ -18,8 +18,6 @@ export default function DreamLayout({
     useEffect(() => {
         if (status === 'unauthenticated') {
             router.push('/auth/signin');
-        } else if (status === 'authenticated' && !(session?.user as any)?.betaAccess) {
-            router.push('/waitlist-pending');
         }
     }, [status, session, router]);
 
@@ -34,7 +32,7 @@ export default function DreamLayout({
     }
 
     // Don't render anything if we're unauthorized (the useEffect handles the redirect)
-    if (status === 'unauthenticated' || (status === 'authenticated' && !(session?.user as any)?.betaAccess)) {
+    if (status === 'unauthenticated') {
         return null;
     }
 

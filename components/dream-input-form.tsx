@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ArtStyle, Dream } from '@/types';
 import { Loader2, AlertCircle, Zap, Upload, X, CheckCircle2 } from 'lucide-react';
 import { COMIC_STYLES } from '@/lib/constants';
-import { UploadButton } from "@/lib/uploadthing";
+import { UploadButton } from "../lib/uploadthing";
 
 interface DreamInputFormProps {
     onDreamGenerated: (dream: Dream) => void;

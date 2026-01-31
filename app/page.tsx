@@ -163,9 +163,7 @@ export default function Home() {
 
           <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 pointer-events-none z-10" />
           {/* Sticker */}
-          <div className="absolute top-4 right-4 rotate-12 bg-[#A34941] text-white text-[10px] font-black py-1 px-3 rounded shadow-sm z-20">
-            BETA v2
-          </div>
+
 
           <Globe className="w-10 h-10 opacity-70 mb-auto relative z-20" />
 
