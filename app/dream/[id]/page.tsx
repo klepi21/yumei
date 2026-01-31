@@ -12,18 +12,29 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { id } = await (params as any);
     await dbConnect();
-    const dream = await Dream.findById(params.id);
+    const dream = await Dream.findById(id);
 
     if (!dream) return { title: 'Dream Not Found | Yumei' };
 
+    const siteUrl = process.env.NEXTAUTH_URL || 'https://yumei-plans.vercel.app';
+
     return {
+        metadataBase: new URL(siteUrl),
         title: `Dream: ${dream.input.slice(0, 50)}... | Yumei`,
         description: dream.interpretedNarrative || 'A comic generated from a dream using Yumei.',
         openGraph: {
             title: 'Yumei - Dream to Comic',
             description: dream.input.slice(0, 100),
-            images: [dream.comicImageUrl],
+            images: [
+                {
+                    url: dream.comicImageUrl,
+                    width: 832,
+                    height: 1248,
+                    alt: 'Generated Comic Strip',
+                }
+            ],
             type: 'article',
         },
         twitter: {
@@ -36,8 +47,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function DreamView({ params }: Props) {
+    const { id } = await (params as any);
     await dbConnect();
-    const dream = await Dream.findById(params.id);
+    const dream = await Dream.findById(id);
 
     if (!dream) {
         notFound();
