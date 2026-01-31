@@ -16,7 +16,7 @@ export default function ComicStrip({ dream }: ComicStripProps) {
                 {!isLegacyFormat && dream.comicImageUrl && (
                     <div className="relative group w-full">
                         {/* Main comic container */}
-                        <div className="relative bg-card rounded-xl border border-border p-2 shadow-sm">
+                        <div className="relative bg-card rounded-xl border border-border p-2 shadow-sm max-w-2xl mx-auto">
                             {/* The Comic Image */}
                             <div className="relative w-full rounded-lg overflow-hidden border-2 border-black">
                                 <Image
