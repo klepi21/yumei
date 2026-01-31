@@ -63,19 +63,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function DreamView({ params }: Props) {
+    const resolvedParams = await params;
+    const id = resolvedParams?.id;
+
+    if (!id) notFound();
+
+    await dbConnect();
+    const dream = await Dream.findById(id);
+
+    if (!dream) {
+        notFound();
+    }
+
     try {
-        const resolvedParams = await params;
-        const id = resolvedParams?.id;
-
-        if (!id) notFound();
-
-        await dbConnect();
-        const dream = await Dream.findById(id);
-
-        if (!dream) {
-            notFound();
-        }
-
         // Sanitize for the client component
         const sanitizedDreamData = JSON.parse(JSON.stringify(dream));
         // Add an id field for consistency with previous types
@@ -118,14 +118,14 @@ export default async function DreamView({ params }: Props) {
             </div>
         );
     } catch (error) {
-        console.error('Dream view failed:', error);
+        console.error('Dream render failed:', error);
         return (
             <div className="min-h-screen bg-background flex flex-col items-center justify-center p-8 text-center border-4 border-black border-double">
                 <div className="max-w-md space-y-6">
                     <Disc className="w-16 h-16 mx-auto animate-spin-slow opacity-20" />
                     <h1 className="text-4xl font-black uppercase tracking-tighter">System Error</h1>
                     <p className="font-mono text-sm opacity-60 bg-black/5 p-4 rounded border border-dashed border-black/20">
-                        Unable to stabilize the shared dream sequence. The record may be corrupted or moving through a maintenance cycle.
+                        Unable to stabilize the dream sequence. A rendering exception occurred on the server.
                     </p>
                     <Link href="/dream">
                         <Button className="mt-8 bg-black text-white hover:bg-zinc-800 font-bold uppercase tracking-widest border-2 border-white/10 px-8 py-6 rounded-none">

@@ -1,3 +1,5 @@
+'use client';
+
 import { Dream } from '@/types';
 import Image from 'next/image';
 

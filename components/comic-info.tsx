@@ -1,3 +1,5 @@
+'use client';
+
 import { Dream } from '@/types';
 import { Download, Share2 } from 'lucide-react';
 import { Button } from './ui/button';
