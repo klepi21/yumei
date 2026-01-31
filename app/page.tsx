@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
@@ -7,6 +8,20 @@ import { ArrowUpRight, BookOpen, Sparkles, Activity, Globe, Disc, Plus } from 'l
 
 export default function Home() {
   const { data: session } = useSession();
+  const [stats, setStats] = useState({ globalCount: 0, userCount: 0 });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        if (data && !data.error) setStats(data);
+      } catch (e) {
+        console.error("Failed to fetch stats", e);
+      }
+    };
+    fetchStats();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8 font-sans text-foreground selection:bg-primary selection:text-primary-foreground relative">
@@ -107,7 +122,7 @@ export default function Home() {
           <div className="border-t-2 border-black/10 pt-4 flex justify-between items-end relative z-10">
             <div className="flex flex-col">
               <span className="text-[10px] font-mono font-bold opacity-60 uppercase">Records</span>
-              <span className="text-2xl font-bold font-mono">128</span>
+              <span className="text-2xl font-bold font-mono">{stats.userCount}</span>
             </div>
             <ArrowUpRight className="w-8 h-8 p-1 bg-black text-white rounded-lg group-hover:rotate-45 transition-transform" />
           </div>
@@ -118,7 +133,7 @@ export default function Home() {
         {/* 3. STATS TILE (Solid Cyber Green) */}
         {/* ... stays solid for contrast ... */}
         <div className="bg-[#658963] text-white p-6 rounded-[2rem] border-2 border-white/10 flex flex-col justify-between hover:scale-[1.02] transition-transform shadow-lg relative overflow-hidden">
-          <div className="absolute -right-4 -bottom-4 text-9xl font-black opacity-10 text-black z-0">25</div>
+          <div className="absolute -right-4 -bottom-4 text-9xl font-black opacity-10 text-black z-0">{stats.globalCount}+</div>
 
           <div className="relative z-10">
             <div className="flex justify-between items-start mb-2">
