@@ -48,15 +48,7 @@ export default function Home() {
         <div
           className="md:col-span-2 lg:col-span-2 row-span-2 bg-[#A34941] text-white rounded-[2rem] p-8 flex flex-col justify-between relative overflow-hidden group border-2 border-white/10 shadow-xl"
         >
-          {/* Background Comic Layer */}
-          <div className="absolute inset-0 z-0 opacity-20 grayscale group-hover:grayscale-0 group-hover:opacity-40 transition-all duration-700">
-            <img
-              src="/examples/example1.png"
-              alt="Comic background"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#A34941] via-[#A34941]/50 to-transparent" />
-          </div>
+          {/* No background image per user request */}
 
           {/* Decorative Kanji/Tech */}
           <div className="absolute top-6 right-6 flex flex-col items-end opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity z-10">
@@ -77,9 +69,9 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="flex items-center gap-4 mt-8 relative z-10">
+          <div className="flex items-center gap-4 mt-auto mb-4 relative z-10">
             <Link href={session ? "/dream" : "/api/auth/signin"} className="w-full sm:w-auto">
-              <Button size="lg" className="h-16 rounded-xl bg-black text-white hover:bg-zinc-900 border-2 border-transparent hover:border-white/20 text-xl font-bold gap-3 pl-8 pr-8 w-full transition-all group-hover:translate-x-1">
+              <Button size="lg" className="h-16 rounded-xl bg-black text-white hover:bg-zinc-900 border-2 border-white/10 text-xl font-bold gap-3 pl-8 pr-8 w-full transition-all group-hover:translate-x-1 shadow-2xl">
                 CREATE COMIC <ArrowUpRight className="w-6 h-6" />
               </Button>
             </Link>
