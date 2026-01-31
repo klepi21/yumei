@@ -64,12 +64,14 @@ CHARACTER CONSISTENCY RULES (HIGHEST PRIORITY):
 - Apply comic style to body/pose/action but preserve exact facial appearance
 - Same character must look identical across all panels they appear in
 
-TEXT AND LETTERING (CRITICAL):
-- All text in speech bubbles must be PERFECTLY CLEAR, LEGIBLE, and correctly spelled
-- Use bold clean comic book lettering, large and easy to read
-- Speech bubbles: crisp white fill, solid black outline, pointed tail toward speaker
-- Keep dialogue SHORT: maximum 1-2 sentences per bubble
-- NO blurry, warped, or unreadable text
+TEXT AND LETTERING (CRITICAL - MAXIMUM PRIORITY):
+- DIALOGUE ACCURACY: All text in speech bubbles must be 100% CORRECT, with perfect spelling and grammar.
+- NO PSEUDO-TEXT: Do not generate garbled, distorted, or unreadable marks. Every letter must be a clear character.
+- FONT STYLE: Use a clean, bold, hand-drawn SANS-SERIF comic book font. Avoid overly stylized or "scratchy" lettering.
+- MAXIMUM LEGIBILITY: Text must be large, high-contrast black characters on a solid white bubble background.
+- SPEECH BUBBLES: Crisp, oval or rectangular bubbles with a thin solid black outline and a clear tail pointing to the speaker.
+- BUBBLE PADDING: Ensure enough white space around the text inside the bubbles so it doesn't touch the borders.
+- SHORT & PUNCHY: Keep dialogue to a maximum of 1-2 short, punchy sentences per panel to maintain readability.
 
 PAGE LAYOUT:
 5-panel comic page arranged as:
