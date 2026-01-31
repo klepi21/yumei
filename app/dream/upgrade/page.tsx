@@ -34,8 +34,6 @@ export default function UpgradePage() {
 
                     <div className="flex-1 space-y-4 mb-8">
                         <FeatureItem text="50 AI Generations" />
-                        <FeatureItem text="Permanent Library Access" />
-                        <FeatureItem text="Instant Result Delivery" />
                     </div>
 
                     <Button className="w-full bg-black text-white hover:bg-zinc-900 border-none font-bold rounded-xl h-12 uppercase">
@@ -59,8 +57,6 @@ export default function UpgradePage() {
 
                     <div className="flex-1 space-y-4 mb-8">
                         <FeatureItem text="200 AI Generations" />
-                        <FeatureItem text="Permanent Library Access" />
-                        <FeatureItem text="Instant Result Delivery" />
                     </div>
 
                     <Link href="#" className="w-full">
@@ -82,8 +78,6 @@ export default function UpgradePage() {
 
                     <div className="flex-1 space-y-4 mb-8">
                         <FeatureItem text="500 AI Generations" />
-                        <FeatureItem text="Permanent Library Access" />
-                        <FeatureItem text="Instant Result Delivery" />
                     </div>
 
                     <Link href="#" className="w-full">
