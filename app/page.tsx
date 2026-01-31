@@ -69,9 +69,9 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="flex items-center gap-4 mt-auto mb-4 relative z-10">
+          <div className="flex justify-end mt-auto mb-2 relative z-10">
             <Link href={session ? "/dream" : "/api/auth/signin"} className="w-full sm:w-auto">
-              <Button size="lg" className="h-16 rounded-xl bg-black text-white hover:bg-zinc-900 border-2 border-white/10 text-xl font-bold gap-3 pl-8 pr-8 w-full transition-all group-hover:translate-x-1 shadow-2xl">
+              <Button size="lg" className="h-16 rounded-xl bg-black text-white hover:bg-zinc-900 border-2 border-white/10 text-xl font-bold gap-3 pl-8 pr-8 w-full shadow-2xl transition-all hover:scale-105 active:scale-95">
                 CREATE COMIC <ArrowUpRight className="w-6 h-6" />
               </Button>
             </Link>
