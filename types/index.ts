@@ -1,4 +1,4 @@
-export type ArtStyle = 'anime' | 'cyberpunk' | 'ghibli' | 'manga';
+export type ArtStyle = 'american-modern' | 'manga' | 'noir' | 'vintage';
 
 export interface DreamPanel {
   id: string;

@@ -9,8 +9,9 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ArtStyle, Dream } from '@/types';
-import { Loader2, AlertCircle, Zap } from 'lucide-react';
+import { Loader2, AlertCircle, Zap, Upload, X, CheckCircle2 } from 'lucide-react';
 import { COMIC_STYLES } from '@/lib/constants';
+import { UploadButton } from "@/lib/uploadthing";
 
 interface DreamInputFormProps {
     onDreamGenerated: (dream: Dream) => void;
@@ -38,8 +39,8 @@ export default function DreamInputForm({ onDreamGenerated }: DreamInputFormProps
 
     const [formData, setFormData] = useState({
         dream: '',
-        emotion: '',
-        style: 'anime' as ArtStyle
+        style: 'american-modern' as ArtStyle,
+        characterImages: [] as string[]
     });
 
     useEffect(() => {
@@ -111,7 +112,7 @@ export default function DreamInputForm({ onDreamGenerated }: DreamInputFormProps
                 <div>
                     <h2 className="text-xl font-black uppercase tracking-tight text-neutral-800">DREAM PARAMETERS</h2>
                     <p className="text-xs font-mono text-neutral-600 mt-1">
-                        Input subjective narrative data for rendering.
+                        Input subjective narrative data and character references.
                     </p>
                 </div>
                 {/* STATUS BADGE - NUDE STYLE */}
@@ -137,7 +138,7 @@ export default function DreamInputForm({ onDreamGenerated }: DreamInputFormProps
                     <Textarea
                         id="dream"
                         placeholder="I was flying over a neon city..."
-                        className="flex-1 min-h-[150px] bg-background border-2 border-border focus:border-primary text-foreground placeholder:text-muted-foreground focus:ring-0 rounded-xl resize-none p-4 text-base font-medium"
+                        className="flex-1 min-h-[120px] bg-background border-2 border-border focus:border-primary text-foreground placeholder:text-muted-foreground focus:ring-0 rounded-xl resize-none p-4 text-base font-medium"
                         value={formData.dream}
                         onChange={(e) => setFormData({ ...formData, dream: e.target.value })}
                         required
@@ -146,17 +147,58 @@ export default function DreamInputForm({ onDreamGenerated }: DreamInputFormProps
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* EMOTION INPUT */}
+                    {/* CHARACTER UPLOAD */}
                     <div className="space-y-2">
-                        <Label htmlFor="emotion" className="text-xs font-mono uppercase tracking-widest text-primary">02 // EMOTION</Label>
-                        <Input
-                            id="emotion"
-                            placeholder="e.g. Wonder, Fear"
-                            className="bg-background border-2 border-border focus:border-primary h-12 rounded-xl"
-                            value={formData.emotion}
-                            onChange={(e) => setFormData({ ...formData, emotion: e.target.value })}
-                            disabled={!status.canGenerate && !loading}
-                        />
+                        <Label className="text-xs font-mono uppercase tracking-widest text-primary flex items-center gap-2">
+                            02 // CHARACTER REF <span className="text-[10px] opacity-50 lowercase font-normal">(OPTIONAL, MAX 2)</span>
+                        </Label>
+                        <div className="flex gap-2">
+                            {formData.characterImages.length < 2 && (
+                                <UploadButton
+                                    endpoint="imageUploader"
+                                    onClientUploadComplete={(res: any) => {
+                                        if (res?.[0]) {
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                characterImages: [...prev.characterImages, (res[0] as any).url]
+                                            }));
+                                        }
+                                    }}
+                                    onUploadError={(error: Error) => {
+                                        setError(`Upload failed: ${error.message}`);
+                                    }}
+                                    appearance={{
+                                        button: "ut-ready:bg-background ut-ready:border-2 ut-ready:border-border ut-ready:text-foreground ut-ready:h-12 ut-ready:rounded-xl ut-ready:w-12 ut-ready:p-0 ut-ready:flex ut-ready:items-center ut-ready:justify-center hover:ut-ready:bg-muted font-mono text-[10px]",
+                                        allowedContent: "hidden"
+                                    }}
+                                    content={{
+                                        button: <Upload className="w-5 h-5" />
+                                    }}
+                                />
+                            )}
+                            <div className="flex gap-2 flex-1">
+                                {formData.characterImages.map((img, i) => (
+                                    <div key={i} className="relative w-12 h-12 rounded-xl group overflow-hidden border-2 border-primary/20">
+                                        <img src={img} alt={`Character ${i + 1}`} className="w-full h-full object-cover" />
+                                        <button
+                                            type="button"
+                                            onClick={() => setFormData(prev => ({
+                                                ...prev,
+                                                characterImages: prev.characterImages.filter((_, idx) => idx !== i)
+                                            }))}
+                                            className="absolute inset-0 bg-destructive/80 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
+                                        >
+                                            <X className="w-4 h-4 text-white" />
+                                        </button>
+                                    </div>
+                                ))}
+                                {formData.characterImages.length === 0 && (
+                                    <div className="flex-1 h-12 border-2 border-border border-dashed rounded-xl flex items-center justify-center px-3">
+                                        <span className="text-[10px] font-mono text-muted-foreground uppercase opacity-40">No characters uploaded</span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
 
                     {/* STYLE SELECTOR */}

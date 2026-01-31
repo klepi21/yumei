@@ -102,6 +102,8 @@ COMPOSITION:
     }
 }
 
+import { buildComicPrompt } from '@/lib/prompt-utils';
+
 export async function POST(req: Request) {
     try {
         const session = await getServerSession(authOptions);
@@ -110,21 +112,18 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { dream, style, emotion } = body;
+        const { dream, style, characterImages = [] } = body;
 
         if (!dream) return NextResponse.json({ error: 'Dream description is required' }, { status: 400 });
 
         await dbConnect();
 
         // RATE LIMIT CHECK
-        // RATE LIMIT CHECK
         const user = await User.findOne({ email: session.user.email });
         let usedCredit = false;
 
-        // Check if user has extra credits
         if (user && user.credits > 0) {
             usedCredit = true;
-            // Will decrement later after successful generation to avoid losing credits on error
         }
         else if (user && user.lastGenerationDate) {
             const lastGen = new Date(user.lastGenerationDate);
@@ -133,7 +132,6 @@ export async function POST(req: Request) {
                 lastGen.getMonth() === today.getMonth() &&
                 lastGen.getFullYear() === today.getFullYear();
 
-            // Only block if no credits AND daily limit reached AND not Pro
             if (isSameDay && !user.isPro) {
                 return NextResponse.json({
                     error: 'Daily limit reached. Upgrade to Unlimited or buy credits!',
@@ -142,23 +140,14 @@ export async function POST(req: Request) {
             }
         }
 
-
-
-        // DIRECT TO IMAGE GENERATION MODE (User Requested)
-        // Skip AI analysis to avoid JSON errors and potential censorship blocks
-        // Pass raw dream text directly to image generator context
-
-        let panelCount = 4;
+        let panelCount = 5;
         let sanitizedDream = dream;
-        let narrative = "Direct visual interpretation of the dream";
 
-        // SAFETY LAYER: Sanitize text to prevent Google 400 errors
+        // SAFETY LAYER: Sanitize text
         try {
-            console.log('🛡️ Sanitizing dream text for safety...');
             const safetyPrompt = `Rewrite the following dream description to be PG-13 and safe for a public comic strip.
             - Remove gore and extreme violence.
             - Replace lethal actions (shooting, stabbing) with non-lethal alternatives (stunners, energy blasts, pushing).
-            - CRITICAL: Preserve the exact sequence of events, characters, and outcomes (who falls, who stands).
             - Output ONLY the rewritten safe text. Do not add explanations.
 
             Dream: "${dream}"`;
@@ -169,26 +158,30 @@ export async function POST(req: Request) {
             });
 
             const safeText = safetyCheck.choices[0].message?.content?.trim();
-            if (safeText) {
-                sanitizedDream = safeText;
-                console.log('✅ Dream sanitized:', sanitizedDream.substring(0, 50) + '...');
-            }
+            if (safeText) sanitizedDream = safeText;
         } catch (e) {
-            console.warn('⚠️ Sanitization failed, using original text:', e);
+            console.warn('⚠️ Sanitization failed:', e);
         }
-        // Construct generic sequential panels to structure the page, relying on the main story context
-        // for actual content details.
-        let panelDescriptions = [
-            { visualDescription: "Opening scene establishing the setting and mood", dialogue: "", panelSize: "medium" },
-            { visualDescription: "Key action or conflict developing", dialogue: "", panelSize: "medium" },
-            { visualDescription: "Climax or main event of the dream", dialogue: "", panelSize: "wide" },
-            { visualDescription: "Resolution or fading of the dream", dialogue: "", panelSize: "medium" }
-        ];
 
-        console.log(`⏩ Proceeding to image generation with sanitized text`);
+        const comicPrompt = buildComicPrompt({
+            prompt: sanitizedDream,
+            style,
+            characterImages
+        });
 
-        // 2. Generate the multi-panel comic strip with detailed scene descriptions
-        const comicResult = await generateComicStrip(sanitizedDream, panelDescriptions, style, emotion, panelCount);
+        console.log('🎨 Generating comic with prompt:', comicPrompt.substring(0, 100) + '...');
+
+        const comicResponse = await together.images.generate({
+            model: 'google/flash-image-2.5',
+            prompt: comicPrompt,
+            width: 832,
+            height: 1248,
+        });
+
+        const comicResult = comicResponse.data?.[0] ? {
+            imageUrl: comicResponse.data[0].url,
+            prompt: comicPrompt
+        } : null;
 
         if (!comicResult) {
             return NextResponse.json({
@@ -224,6 +217,8 @@ export async function POST(req: Request) {
         }
         // ------------------------------------
 
+        const narrative = "Direct visual interpretation of the dream";
+
         // 3. Save to MongoDB
         let newDream;
         try {
@@ -237,6 +232,7 @@ export async function POST(req: Request) {
                 sanitizedDream: sanitizedDream,
                 panelCount: panelCount,
                 imagePrompt: comicResult.prompt,
+                characterImages: characterImages,
                 status: 'completed',
             });
             console.log('✅ Dream saved successfully:', newDream._id);

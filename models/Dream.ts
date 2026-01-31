@@ -28,6 +28,7 @@ const DreamSchema = new mongoose.Schema({
     sanitizedDream: String, // The safe version of the text if modified
     panelCount: Number, // Number of panels in the comic (3-6)
     imagePrompt: String, // The prompt used to generate the comic
+    characterImages: [String], // URLs of uploaded character references
     status: {
         type: String,
         enum: ['pending', 'processing', 'completed', 'failed'],
