@@ -153,14 +153,17 @@ export default function OpenWorldPage() {
             </div>
 
             {/* Info Panel (Right) */}
-            <div className="w-full md:w-[450px] bg-white/40 backdrop-blur-xl p-8 md:p-14 flex flex-col justify-between relative z-20 border-t md:border-t-0 border-black/10">
+            <div className="w-full md:w-[450px] bg-white/40 backdrop-blur-xl p-8 md:p-14 pt-16 md:pt-24 flex flex-col justify-between relative z-20 border-t md:border-t-0 border-black/10">
                 <div className="space-y-12">
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                         <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-[#A34941] rounded-full animate-pulse" />
                             <span className="text-[11px] font-mono font-black text-[#A34941] uppercase tracking-[0.3em]">Synapse Fragment</span>
                         </div>
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-black italic uppercase leading-[0.85] tracking-tighter break-words line-clamp-[8]">
+                        <h2 className={`font-black text-black italic uppercase leading-[0.9] tracking-tighter break-words line-clamp-[12] transition-all duration-300 ${currentComic.input.length > 150 ? 'text-2xl md:text-3xl' :
+                                currentComic.input.length > 80 ? 'text-3xl md:text-4xl' :
+                                    'text-4xl md:text-5xl'
+                            }`}>
                             {currentComic.input}
                         </h2>
                     </div>
