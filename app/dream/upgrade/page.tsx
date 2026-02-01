@@ -1,11 +1,35 @@
-'use client';
-
-import React from 'react';
-import { Check, Zap, Crown } from 'lucide-react';
+import { useState } from 'react';
+import { Check, Zap, Crown, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function UpgradePage() {
+    const [loading, setLoading] = useState<string | null>(null);
+    const router = useRouter();
+
+    const handleCheckout = async (packName: string, variantId: string) => {
+        setLoading(packName);
+        try {
+            const res = await fetch('/api/checkout/lemonsqueezy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ packName, variantId })
+            });
+
+            const data = await res.json();
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                alert(data.error || 'Failed to start checkout. Check your variant IDs.');
+            }
+        } catch (error) {
+            console.error('Checkout error:', error);
+            alert('Something went wrong. Please try again.');
+        } finally {
+            setLoading(null);
+        }
+    };
+
     return (
         <div className="container mx-auto px-4 md:px-8 py-8 max-w-7xl">
             <div className="flex flex-col items-center text-center mb-12">
@@ -36,8 +60,12 @@ export default function UpgradePage() {
                         <FeatureItem text="50 AI Generations" />
                     </div>
 
-                    <Button className="w-full bg-black text-white hover:bg-zinc-900 border-none font-bold rounded-xl h-12 uppercase">
-                        Buy Now
+                    <Button
+                        onClick={() => handleCheckout('PULSE PACK', '614213')} // Placeholder Variant ID
+                        disabled={!!loading}
+                        className="w-full bg-black text-white hover:bg-zinc-900 border-none font-bold rounded-xl h-12 uppercase flex items-center justify-center gap-2"
+                    >
+                        {loading === 'PULSE PACK' ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Buy Now'}
                     </Button>
                 </div>
 
@@ -59,11 +87,15 @@ export default function UpgradePage() {
                         <FeatureItem text="200 AI Generations" />
                     </div>
 
-                    <Link href="#" className="w-full">
-                        <Button className="w-full bg-black text-white hover:bg-zinc-900 border-none font-bold rounded-xl h-14 uppercase text-lg shadow-lg">
-                            Get Pack <Zap className="w-5 h-5 ml-2 fill-white" />
-                        </Button>
-                    </Link>
+                    <Button
+                        onClick={() => handleCheckout('SYNAPSE PACK', '614214')} // Placeholder Variant ID
+                        disabled={!!loading}
+                        className="w-full bg-black text-white hover:bg-zinc-900 border-none font-bold rounded-xl h-14 uppercase text-lg shadow-lg flex items-center justify-center gap-2"
+                    >
+                        {loading === 'SYNAPSE PACK' ? <Loader2 className="w-5 h-5 animate-spin" /> : (
+                            <>Get Pack <Zap className="w-5 h-5 fill-white" /></>
+                        )}
+                    </Button>
                 </div>
 
                 {/* 3. NEURAL ENGINE (Large - Red) */}
@@ -80,11 +112,15 @@ export default function UpgradePage() {
                         <FeatureItem text="500 AI Generations" />
                     </div>
 
-                    <Link href="#" className="w-full">
-                        <Button className="w-full bg-white text-black hover:bg-gray-200 border-none font-bold rounded-xl h-12 uppercase">
-                            Go Pro <Crown className="w-5 h-5 ml-2" />
-                        </Button>
-                    </Link>
+                    <Button
+                        onClick={() => handleCheckout('NEURAL ENGINE', '614215')} // Placeholder Variant ID
+                        disabled={!!loading}
+                        className="w-full bg-white text-black hover:bg-gray-200 border-none font-bold rounded-xl h-12 uppercase flex items-center justify-center gap-2"
+                    >
+                        {loading === 'NEURAL ENGINE' ? <Loader2 className="w-4 h-4 animate-spin" /> : (
+                            <>Go Pro <Crown className="w-5 h-5" /></>
+                        )}
+                    </Button>
                 </div>
             </div>
 
