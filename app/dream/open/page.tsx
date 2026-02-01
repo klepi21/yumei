@@ -101,10 +101,18 @@ export default function OpenWorldPage() {
 
             {/* Main Comic Display (Left) */}
             <div className="flex-1 relative z-10 flex items-start justify-center pt-24 pb-32 md:pt-32 md:pb-40 px-4 md:px-12 overflow-hidden border-b md:border-b-0 md:border-r border-black/10">
-                {/* Branding Logo */}
-                <div className="absolute top-8 left-8 flex items-center gap-3 opacity-60">
-                    <div className="w-8 h-8 rounded-full bg-[#A34941] flex items-center justify-center text-white font-black text-xs">Y</div>
-                    <span className="font-black tracking-tighter text-xl uppercase italic text-black">YUMEI</span>
+                {/* Branding Logo (Hanko Style) */}
+                <div className="absolute top-8 left-8 flex items-center gap-4 group">
+                    <div className="relative w-12 h-12 flex items-center justify-center border-2 border-[#A34941] rounded-sm transform active:scale-95 transition-transform duration-300">
+                        <div className="absolute inset-[2px] border border-[#A34941]/30 rounded-sm" />
+                        <span className="text-2xl font-black text-[#A34941] leading-none select-none">夢</span>
+                        {/* Static Japanese Decor */}
+                        <div className="absolute -top-1 -right-1 w-2 h-2 bg-[#A34941]" />
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="font-black tracking-tighter text-2xl uppercase italic text-black leading-none group-hover:tracking-widest transition-all duration-700">YUMEI</span>
+                        <span className="text-[10px] font-mono tracking-[0.3em] text-[#A34941] font-black uppercase mt-1">ユメイ // DREAM</span>
+                    </div>
                 </div>
 
                 {/* Background Kanji Decor */}
@@ -141,7 +149,10 @@ export default function OpenWorldPage() {
                 {/* Progress Indicator (Bottom) */}
                 <div className="absolute bottom-8 left-8 right-8 flex items-end justify-between">
                     <div className="flex flex-col gap-1">
-                        <span className="text-[10px] font-mono font-black text-black opacity-30 uppercase tracking-[0.2em]">Neural Buffer</span>
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-mono font-black text-black opacity-30 uppercase tracking-[0.2em]">Neural Buffer</span>
+                            <span className="text-[8px] font-mono font-black text-[#A34941] opacity-40 uppercase">// ニューラル・バッファ</span>
+                        </div>
                         <div className="flex gap-2">
                             {comics.slice(0, 10).map((_, i) => (
                                 <div key={i} className={`h-1 rounded-full transition-all duration-300 ${i === (activeIndex % 10) ? 'w-8 bg-[#A34941]' : 'w-2 bg-black/10'}`} />
@@ -159,10 +170,11 @@ export default function OpenWorldPage() {
                         <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-[#A34941] rounded-full animate-pulse" />
                             <span className="text-[11px] font-mono font-black text-[#A34941] uppercase tracking-[0.3em]">Synapse Fragment</span>
+                            <span className="text-[9px] font-mono font-black text-black opacity-20 uppercase tracking-[0.1em]">// シナプス・フラグメント</span>
                         </div>
                         <h2 className={`font-black text-black italic uppercase leading-[0.9] tracking-tighter break-words line-clamp-[12] transition-all duration-300 ${currentComic.input.length > 150 ? 'text-2xl md:text-3xl' :
-                                currentComic.input.length > 80 ? 'text-3xl md:text-4xl' :
-                                    'text-4xl md:text-5xl'
+                            currentComic.input.length > 80 ? 'text-3xl md:text-4xl' :
+                                'text-4xl md:text-5xl'
                             }`}>
                             {currentComic.input}
                         </h2>
