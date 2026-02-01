@@ -25,6 +25,10 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    privacyMode: {
+        type: Boolean,
+        default: false,
+    },
     lastGenerationDate: {
         type: Date,
     },

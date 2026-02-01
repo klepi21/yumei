@@ -8,6 +8,52 @@ import Link from 'next/link';
 
 export default function SettingsPage() {
     const { data: session } = useSession();
+    const [settings, setSettings] = React.useState({
+        privacyMode: false,
+        notifications: false,
+        haptics: true
+    });
+    const [loading, setLoading] = React.useState(true);
+    const [updating, setUpdating] = React.useState<string | null>(null);
+
+    React.useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await fetch('/api/user/settings');
+                const data = await res.json();
+                if (!data.error) {
+                    setSettings(data);
+                }
+            } catch (error) {
+                console.error('Failed to fetch settings:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchSettings();
+    }, []);
+
+    const toggleSetting = async (key: keyof typeof settings) => {
+        if (updating) return;
+        setUpdating(key);
+
+        const newValue = !settings[key];
+        try {
+            const res = await fetch('/api/user/settings', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ [key]: newValue })
+            });
+            const data = await res.json();
+            if (data.success) {
+                setSettings(prev => ({ ...prev, [key]: newValue }));
+            }
+        } catch (error) {
+            console.error('Failed to update setting:', error);
+        } finally {
+            setUpdating(null);
+        }
+    };
 
     return (
         <div className="container mx-auto px-4 md:px-8 py-8 max-w-6xl">
@@ -83,9 +129,30 @@ export default function SettingsPage() {
                     </h3>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <SettingToggle icon={Bell} title="NOTIFICATIONS" description="System alerts." />
-                        <SettingToggle icon={Shield} title="PRIVACY MODE" description="Hide from feed." />
-                        <SettingToggle icon={Smartphone} title="HAPTICS" description="Vibration on." active />
+                        <SettingToggle
+                            icon={Bell}
+                            title="NOTIFICATIONS"
+                            description="System alerts."
+                            active={settings.notifications}
+                            loading={updating === 'notifications' || loading}
+                            onClick={() => toggleSetting('notifications')}
+                        />
+                        <SettingToggle
+                            icon={Shield}
+                            title="PRIVACY MODE"
+                            description="Hide from feed."
+                            active={settings.privacyMode}
+                            loading={updating === 'privacyMode' || loading}
+                            onClick={() => toggleSetting('privacyMode')}
+                        />
+                        <SettingToggle
+                            icon={Smartphone}
+                            title="HAPTICS"
+                            description="Vibration on."
+                            active={settings.haptics}
+                            loading={updating === 'haptics' || loading}
+                            onClick={() => toggleSetting('haptics')}
+                        />
                     </div>
                 </div>
             </div>
@@ -93,19 +160,37 @@ export default function SettingsPage() {
     );
 }
 
-function SettingToggle({ icon: Icon, title, description, active = false }: { icon: any, title: string, description: string, active?: boolean }) {
+function SettingToggle({
+    icon: Icon,
+    title,
+    description,
+    active = false,
+    loading = false,
+    onClick
+}: {
+    icon: any,
+    title: string,
+    description: string,
+    active?: boolean,
+    loading?: boolean,
+    onClick: () => void
+}) {
     return (
-        <div className="flex items-center gap-4 p-4 bg-black/5 rounded-2xl border border-black/5 hover:bg-black/10 transition-colors cursor-pointer group">
-            <div className={`p-3 rounded-xl ${active ? 'bg-[#A34941] text-white' : 'bg-black/10 text-black/50'}`}>
-                <Icon className="w-5 h-5" />
+        <div
+            onClick={loading ? undefined : onClick}
+            className={`flex items-center gap-4 p-4 bg-black/5 rounded-2xl border border-black/5 hover:bg-black/10 transition-colors cursor-pointer group ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+            <div className={`p-3 rounded-xl transition-colors ${active ? 'bg-[#A34941] text-white' : 'bg-black/10 text-black/50'}`}>
+                {loading ? <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" /> : <Icon className="w-5 h-5" />}
             </div>
             <div>
                 <div className="flex justify-between items-center gap-2">
                     <h4 className="font-black text-sm uppercase">{title}</h4>
-                    {active && <div className="w-2 h-2 bg-[#658963] rounded-full" />}
+                    {active && <div className="w-2 h-2 bg-[#658963] rounded-full animate-pulse" />}
                 </div>
                 <p className="text-xs opacity-60 font-mono">{description}</p>
             </div>
         </div>
     );
 }
+
