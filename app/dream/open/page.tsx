@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
-import { Loader2, User, Palette, Calendar, ArrowDown, ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { Loader2, User, Palette, Calendar, ChevronDown, ChevronUp, ArrowRight, ArrowLeft, Disc } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface Comic {
     _id: string;
@@ -9,16 +10,18 @@ interface Comic {
     input: string;
     style: string;
     comicImageUrl: string;
+    imageUrl?: string; // Support for legacy field
     createdAt: string;
 }
 
 export default function OpenWorldPage() {
     const [comics, setComics] = useState<Comic[]>([]);
+    const [activeIndex, setActiveIndex] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [initialLoad, setInitialLoad] = useState(true);
     const isFetching = useRef(false);
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    const fetchComics = async () => {
+    const fetchComics = useCallback(async () => {
         if (isFetching.current) return;
         isFetching.current = true;
 
@@ -27,15 +30,8 @@ export default function OpenWorldPage() {
             const data = await res.json();
             if (!data.error) {
                 setComics(prev => {
-                    // Filter out duplicates by forcing _id to string
                     const existingIds = new Set(prev.map(c => c._id.toString()));
                     const newComics = data.filter((c: Comic) => !existingIds.has(c._id.toString()));
-
-                    // Log for debugging (only in development)
-                    if (newComics.length > 0) {
-                        console.log(`Loaded ${newComics.length} new comics. Total: ${prev.length + newComics.length}`);
-                    }
-
                     return [...prev, ...newComics];
                 });
             }
@@ -43,163 +39,183 @@ export default function OpenWorldPage() {
             console.error('Failed to fetch public comics', e);
         } finally {
             setLoading(false);
+            setInitialLoad(false);
             isFetching.current = false;
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchComics();
-    }, []);
+    }, [fetchComics]);
 
-    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-        const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-        // Trigger fetch when user is 200px from the bottom
-        if (scrollTop + clientHeight >= scrollHeight - 200 && !loading) {
-            setLoading(true);
+    // Keyboard Navigation
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') handleNext();
+            if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') handlePrev();
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [comics, activeIndex]);
+
+    const handleNext = () => {
+        if (activeIndex < comics.length - 1) {
+            setActiveIndex(prev => prev + 1);
+        }
+        // Prefetch when near end
+        if (activeIndex > comics.length - 3) {
             fetchComics();
         }
     };
 
-    if (loading && comics.length === 0) {
+    const handlePrev = () => {
+        if (activeIndex > 0) {
+            setActiveIndex(prev => prev - 1);
+        }
+    };
+
+    if (initialLoad) {
         return (
-            <div className="h-full flex flex-col items-center justify-center p-8">
-                <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-                <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest animate-pulse">Accessing Global Dream Stream...</p>
+            <div className="h-full flex flex-col items-center justify-center p-8 bg-[#F2EDE9]">
+                <div className="w-16 h-16 bg-[#A34941] rounded-2xl flex items-center justify-center mb-6 shadow-xl animate-bounce">
+                    <Disc className="w-10 h-10 text-white animate-spin-slow" />
+                </div>
+                <p className="text-xs font-mono text-[#A34941] uppercase tracking-[0.4em] font-black animate-pulse">Syncing Global Nerve Stream</p>
+                <div className="mt-8 w-48 h-[2px] bg-black/5 rounded-full overflow-hidden">
+                    <div className="h-full bg-[#A34941] w-1/3 animate-[progress_2s_infinite]" />
+                </div>
             </div>
         );
     }
 
+    const currentComic = comics[activeIndex];
+
+    if (!currentComic) return null;
+
+    const displayUrl = currentComic.comicImageUrl || currentComic.imageUrl;
+
     return (
-        <div
-            ref={scrollContainerRef}
-            onScroll={handleScroll}
-            className="h-full w-full overflow-y-auto snap-y snap-mandatory bg-[#F2EDE9] scrollbar-hide selection:bg-[#A34941] selection:text-white"
-        >
-            {/* Background Texture Overlay (Paper/Noise) */}
-            <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
+        <div className="h-full w-full bg-[#F2EDE9] relative overflow-hidden flex flex-col md:flex-row selection:bg-[#A34941] selection:text-white">
+            {/* Background Texture Overlay */}
+            <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-0 bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
 
-            {comics.map((comic) => (
-                <section
-                    key={comic._id}
-                    className="h-full w-full snap-start snap-always relative flex flex-col md:flex-row bg-transparent overflow-hidden border-b border-black/5"
-                >
-                    {/* Main Comic Image (Left) */}
-                    <div className="flex-1 h-[65vh] md:h-full relative overflow-hidden flex items-center justify-center p-6 md:p-12">
-                        {/* Branding Logo (Floating) */}
-                        <div className="absolute top-8 left-8 z-20 flex items-center gap-2 opacity-80">
-                            <div className="w-8 h-8 rounded-full bg-[#A34941] flex items-center justify-center text-white font-black text-xs border border-black/10">Y</div>
-                            <span className="font-black tracking-tighter text-xl uppercase italic text-black">YUMEI</span>
+            {/* Main Comic Display (Left) */}
+            <div className="flex-1 relative z-10 flex items-center justify-center p-4 md:p-12 overflow-hidden border-b md:border-b-0 md:border-r border-black/10">
+                {/* Branding Logo */}
+                <div className="absolute top-8 left-8 flex items-center gap-3 opacity-60">
+                    <div className="w-8 h-8 rounded-full bg-[#A34941] flex items-center justify-center text-white font-black text-xs">Y</div>
+                    <span className="font-black tracking-tighter text-xl uppercase italic text-black">YUMEI</span>
+                </div>
+
+                {/* Background Kanji Decor */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none overflow-hidden">
+                    <span className="text-[50vw] font-black text-black leading-none transform translate-y-10">夢</span>
+                </div>
+
+                {/* IMAGE CONTAINER - GUARANTEED VISIBILITY */}
+                <div className="relative w-full h-full flex items-center justify-center max-h-[85vh]">
+                    {displayUrl ? (
+                        <div className="relative group animate-in fade-in zoom-in duration-500">
+                            {/* Frame Effects */}
+                            <div className="absolute -inset-4 border-2 border-dashed border-[#A34941]/10 rounded-lg pointer-events-none" />
+
+                            <img
+                                src={displayUrl}
+                                alt={currentComic.input}
+                                className="max-h-[80vh] max-w-full object-contain shadow-[0_50px_100px_rgba(0,0,0,0.2)] border-8 border-white relative z-10"
+                                key={currentComic._id} // Force re-render on image change
+                            />
+
+                            {/* Red Corner Accents */}
+                            <div className="absolute -top-2 -left-2 w-8 h-8 border-t-4 border-l-4 border-[#A34941] z-20" />
+                            <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-4 border-r-4 border-[#A34941] z-20" />
                         </div>
-
-                        {/* Decorative Kanji (Large Background) */}
-                        <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none">
-                            <span className="text-[40vw] font-black text-black leading-none">夢</span>
+                    ) : (
+                        <div className="space-y-4 opacity-10 flex flex-col items-center">
+                            <Loader2 className="w-20 h-20 animate-spin" />
+                            <span className="font-mono text-sm tracking-widest uppercase font-black">Transfer Blocked</span>
                         </div>
+                    )}
+                </div>
 
-                        {/* Main Comic Image Content */}
-                        {(comic.comicImageUrl || (comic as any).imageUrl) ? (
-                            <div className="relative">
-                                {/* Subtle outer frame */}
-                                <div className="absolute -inset-4 border border-black/5 rounded-sm opacity-50 pointer-events-none" />
-                                <img
-                                    src={comic.comicImageUrl || (comic as any).imageUrl}
-                                    alt={comic.input}
-                                    className="max-h-[80vh] max-w-full object-contain shadow-[0_40px_100px_rgba(0,0,0,0.15)] border-4 border-white relative z-10"
-                                    onLoad={() => console.log('Image loaded successfully:', comic._id)}
-                                    onError={(e) => console.error('Image failed to load:', comic.comicImageUrl)}
-                                />
-                                {/* Corner Accents */}
-                                <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-[#A34941] z-20" />
-                                <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-[#A34941] z-20" />
-                            </div>
-                        ) : (
-                            <div className="flex flex-col items-center gap-4 opacity-20 border-2 border-dashed border-black/10 p-20">
-                                <div className="w-20 h-20 border-2 border-dashed border-black rounded-full flex items-center justify-center animate-spin-slow">
-                                    <Loader2 className="w-8 h-8" />
-                                </div>
-                                <span className="font-mono text-[10px] tracking-[0.3em] uppercase">Transmission Lost</span>
-                            </div>
-                        )}
-
-                        {/* Mobile Scroll Indicator */}
-                        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 md:hidden animate-bounce text-black/30">
-                            <ChevronDown className="w-6 h-6" />
+                {/* Progress Indicator (Bottom) */}
+                <div className="absolute bottom-8 left-8 right-8 flex items-end justify-between">
+                    <div className="flex flex-col gap-1">
+                        <span className="text-[10px] font-mono font-black text-black opacity-30 uppercase tracking-[0.2em]">Neural Buffer</span>
+                        <div className="flex gap-2">
+                            {comics.slice(0, 10).map((_, i) => (
+                                <div key={i} className={`h-1 rounded-full transition-all duration-300 ${i === (activeIndex % 10) ? 'w-8 bg-[#A34941]' : 'w-2 bg-black/10'}`} />
+                            ))}
                         </div>
                     </div>
+                    <span className="font-mono text-xs font-black opacity-40">#{activeIndex + 1} / {comics.length}</span>
+                </div>
+            </div>
 
-                    {/* Info Overlay (Right) */}
-                    <div className="w-full md:w-[400px] p-8 md:p-12 flex flex-col justify-between bg-white/40 backdrop-blur-md md:border-l border-black/10 relative z-10">
-                        {/* Top Section */}
-                        <div className="space-y-12">
-                            <div className="space-y-2">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-1.5 h-1.5 bg-[#A34941] rounded-full animate-pulse" />
-                                    <span className="text-[10px] font-mono font-black text-[#A34941] uppercase tracking-[0.2em]">Neural Fragment</span>
-                                </div>
-                                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[0.85] italic line-clamp-6 text-black">
-                                    {comic.input}
-                                </h2>
-                            </div>
-
-                            {/* Meta Grid */}
-                            <div className="space-y-8 pt-8 border-t border-black/5">
-                                <MetaItem label="Creator" value={`AGENT.${comic.userId.slice(-6).toUpperCase()}`} icon={User} />
-                                <MetaItem label="Style Engine" value={comic.style} icon={Palette} />
-                                <MetaItem label="Neural Sync" value={new Date(comic.createdAt).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })} icon={Calendar} />
-                            </div>
+            {/* Info Panel (Right) */}
+            <div className="w-full md:w-[450px] bg-white/40 backdrop-blur-xl p-8 md:p-14 flex flex-col justify-between relative z-20 border-t md:border-t-0 border-black/10">
+                <div className="space-y-12">
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-[#A34941] rounded-full animate-pulse" />
+                            <span className="text-[11px] font-mono font-black text-[#A34941] uppercase tracking-[0.3em]">Synapse Fragment</span>
                         </div>
-
-                        {/* Bottom Section */}
-                        <div className="mt-12 space-y-6">
-                            {/* Technical Barcode Decor */}
-                            <div className="flex gap-[1px] h-6 items-end opacity-20">
-                                {[...Array(30)].map((_, i) => (
-                                    <div key={i} className={`bg-black w-[1px] h-${(i % 3 === 0 ? 'full' : i % 2 === 0 ? '2/3' : '1/2')}`} />
-                                ))}
-                            </div>
-
-                            <div className="flex flex-col gap-1">
-                                <div className="flex justify-between items-center text-[9px] font-mono font-bold text-black/40 tracking-widest uppercase">
-                                    <span>SYSTEM.CORE.V2</span>
-                                    <span>INSTANT_ACT</span>
-                                </div>
-                                <div className="h-[2px] w-full bg-black/5 rounded-full overflow-hidden">
-                                    <div className="h-full bg-[#A34941] w-[65%] animate-pulse" />
-                                </div>
-                            </div>
-                        </div>
+                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-black italic uppercase leading-[0.85] tracking-tighter break-words line-clamp-[8]">
+                            {currentComic.input}
+                        </h2>
                     </div>
 
-                    {/* Navigation Arrows (Desktop) */}
-                    <div className="absolute right-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col gap-4 items-center z-50">
-                        <button
-                            onClick={() => scrollContainerRef.current?.scrollBy({ top: -window.innerHeight, behavior: 'smooth' })}
-                            className="w-12 h-12 rounded-full bg-white/90 border border-black/10 flex items-center justify-center hover:bg-white hover:scale-110 shadow-sm transition-all text-black/40 hover:text-[#A34941]"
+                    <div className="space-y-10 pt-10 border-t-2 border-black/5 border-dashed">
+                        <MetaItem label="Creator" value={`AGENT.${currentComic.userId.slice(-6).toUpperCase()}`} icon={User} />
+                        <MetaItem label="Style Engine" value={currentComic.style} icon={Palette} />
+                        <MetaItem label="Neural Sync" value={new Date(currentComic.createdAt).toLocaleDateString(undefined, { month: 'long', day: '2-digit', year: 'numeric' })} icon={Calendar} />
+                    </div>
+                </div>
+
+                {/* Overhauled Navigation Controls */}
+                <div className="mt-12 space-y-8">
+                    <div className="grid grid-cols-2 gap-4">
+                        <Button
+                            variant="outline"
+                            disabled={activeIndex === 0}
+                            onClick={handlePrev}
+                            className="bg-white border-2 border-black h-16 rounded-2xl font-black italic uppercase text-lg hover:bg-black hover:text-white transition-all active:scale-95 disabled:opacity-20 flex items-center gap-3"
                         >
-                            <ChevronUp className="w-6 h-6" />
-                        </button>
-                        <button
-                            onClick={() => scrollContainerRef.current?.scrollBy({ top: window.innerHeight, behavior: 'smooth' })}
-                            className="w-12 h-12 rounded-full bg-white/90 border border-black/10 flex items-center justify-center hover:bg-white hover:scale-110 shadow-sm transition-all text-black/40 hover:text-[#A34941]"
+                            <ArrowLeft className="w-6 h-6" /> PREV
+                        </Button>
+                        <Button
+                            onClick={handleNext}
+                            className="bg-[#A34941] text-white border-2 border-black h-16 rounded-2xl font-black italic uppercase text-lg hover:bg-[#8e3a33] transition-all active:scale-95 shadow-[8px_8px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px_rgba(0,0,0,1)] flex items-center gap-3"
                         >
-                            <ChevronDown className="w-6 h-6" />
-                        </button>
+                            NEXT <ArrowRight className="w-6 h-6" />
+                        </Button>
                     </div>
-                </section>
-            ))}
+
+                    {/* Technical Status */}
+                    <div className="pt-6 flex flex-col gap-2 opacity-30">
+                        <div className="flex justify-between font-mono text-[9px] font-black uppercase tracking-[0.2em] text-black">
+                            <span>OS_YUMEI_VERSION_2.0</span>
+                            <span>ACTIVE_STREAM</span>
+                        </div>
+                        <div className="h-[3px] w-full bg-black/5 rounded-full overflow-hidden">
+                            <div className="h-full bg-black w-[85%] animate-[pulse_3s_infinite]" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
 
 function MetaItem({ label, value, icon: Icon }: { label: string; value: string; icon: any }) {
     return (
-        <div className="flex items-center gap-4 group">
-            <div className="w-12 h-12 rounded-sm bg-black/5 flex items-center justify-center border border-black/5 group-hover:bg-[#A34941]/5 group-hover:border-[#A34941]/20 transition-colors">
-                <Icon className="w-5 h-5 opacity-40 group-hover:opacity-80 group-hover:text-[#A34941] transition-all" />
+        <div className="flex items-center gap-5 group">
+            <div className="w-14 h-14 rounded-2xl bg-black flex items-center justify-center text-white border-2 border-black group-hover:bg-[#A34941] group-hover:border-[#A34941] transition-all shadow-[4px_4px_0px_rgba(0,0,0,0.1)] group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] group-hover:shadow-[6px_6px_0px_rgba(0,0,0,0.1)]">
+                <Icon className="w-6 h-6" />
             </div>
             <div className="flex flex-col">
-                <span className="text-[9px] font-mono font-bold opacity-40 uppercase tracking-widest leading-none mb-1">{label}</span>
-                <span className="text-sm font-black font-mono tracking-tighter uppercase text-black leading-none">{value}</span>
+                <span className="text-[10px] font-mono font-black opacity-30 uppercase tracking-[0.2em] leading-none mb-1.5">{label}</span>
+                <span className="text-base font-black font-mono tracking-tight uppercase text-black leading-none">{value}</span>
             </div>
         </div>
     );
