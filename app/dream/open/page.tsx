@@ -15,19 +15,29 @@ interface Comic {
 export default function OpenWorldPage() {
     const [comics, setComics] = useState<Comic[]>([]);
     const [loading, setLoading] = useState(true);
+    const isFetching = useRef(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const fetchComics = async () => {
+        if (isFetching.current) return;
+        isFetching.current = true;
+
         try {
             const res = await fetch('/api/dream/public');
             const data = await res.json();
             if (!data.error) {
-                setComics(prev => [...prev, ...data]);
+                setComics(prev => {
+                    // Filter out duplicates to avoid React key conflicts
+                    const existingIds = new Set(prev.map(c => c._id));
+                    const newComics = data.filter((c: Comic) => !existingIds.has(c._id));
+                    return [...prev, ...newComics];
+                });
             }
         } catch (e) {
             console.error('Failed to fetch public comics', e);
         } finally {
             setLoading(false);
+            isFetching.current = false;
         }
     };
 
@@ -37,7 +47,8 @@ export default function OpenWorldPage() {
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-        if (scrollHeight - scrollTop <= clientHeight + 100 && !loading) {
+        // Trigger fetch when user is 200px from the bottom
+        if (scrollTop + clientHeight >= scrollHeight - 200 && !loading) {
             setLoading(true);
             fetchComics();
         }
@@ -116,7 +127,7 @@ export default function OpenWorldPage() {
                                     <div className="w-1.5 h-1.5 bg-[#A34941] rounded-full animate-pulse" />
                                     <span className="text-[10px] font-mono font-black text-[#A34941] uppercase tracking-[0.2em]">Neural Fragment</span>
                                 </div>
-                                <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-[0.9] italic break-words text-black">
+                                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[0.85] italic line-clamp-6 text-black">
                                     {comic.input}
                                 </h2>
                             </div>
