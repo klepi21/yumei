@@ -27,9 +27,15 @@ export default function OpenWorldPage() {
             const data = await res.json();
             if (!data.error) {
                 setComics(prev => {
-                    // Filter out duplicates to avoid React key conflicts
-                    const existingIds = new Set(prev.map(c => c._id));
-                    const newComics = data.filter((c: Comic) => !existingIds.has(c._id));
+                    // Filter out duplicates by forcing _id to string
+                    const existingIds = new Set(prev.map(c => c._id.toString()));
+                    const newComics = data.filter((c: Comic) => !existingIds.has(c._id.toString()));
+
+                    // Log for debugging (only in development)
+                    if (newComics.length > 0) {
+                        console.log(`Loaded ${newComics.length} new comics. Total: ${prev.length + newComics.length}`);
+                    }
+
                     return [...prev, ...newComics];
                 });
             }
@@ -90,21 +96,24 @@ export default function OpenWorldPage() {
                             <span className="text-[40vw] font-black text-black leading-none">夢</span>
                         </div>
 
-                        {comic.comicImageUrl ? (
-                            <div className="relative group">
+                        {/* Main Comic Image Content */}
+                        {(comic.comicImageUrl || (comic as any).imageUrl) ? (
+                            <div className="relative">
                                 {/* Subtle outer frame */}
                                 <div className="absolute -inset-4 border border-black/5 rounded-sm opacity-50 pointer-events-none" />
                                 <img
-                                    src={comic.comicImageUrl}
+                                    src={comic.comicImageUrl || (comic as any).imageUrl}
                                     alt={comic.input}
-                                    className="max-h-[80vh] max-w-full object-contain shadow-[0_40px_100px_rgba(0,0,0,0.15)] border-2 border-white transition-transform duration-700 group-hover:scale-[1.01]"
+                                    className="max-h-[80vh] max-w-full object-contain shadow-[0_40px_100px_rgba(0,0,0,0.15)] border-4 border-white relative z-10"
+                                    onLoad={() => console.log('Image loaded successfully:', comic._id)}
+                                    onError={(e) => console.error('Image failed to load:', comic.comicImageUrl)}
                                 />
                                 {/* Corner Accents */}
-                                <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-[#A34941]" />
-                                <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-[#A34941]" />
+                                <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-[#A34941] z-20" />
+                                <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-[#A34941] z-20" />
                             </div>
                         ) : (
-                            <div className="flex flex-col items-center gap-4 opacity-20">
+                            <div className="flex flex-col items-center gap-4 opacity-20 border-2 border-dashed border-black/10 p-20">
                                 <div className="w-20 h-20 border-2 border-dashed border-black rounded-full flex items-center justify-center animate-spin-slow">
                                     <Loader2 className="w-8 h-8" />
                                 </div>
