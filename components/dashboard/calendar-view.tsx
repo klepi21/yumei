@@ -90,8 +90,14 @@ export default function CalendarView() {
 
             {/* Detail Modal (Bento Style) */}
             {selectedDream && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-background border-2 border-primary rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col md:flex-row shadow-2xl relative">
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-in fade-in duration-200 cursor-pointer"
+                    onClick={() => setSelectedDream(null)}
+                >
+                    <div
+                        className="bg-background border-2 border-primary rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto flex flex-col md:flex-row shadow-2xl relative cursor-default"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         {/* Technical Label */}
                         <div className="absolute top-0 left-0 bg-primary text-primary-foreground px-4 py-1 text-xs font-mono font-bold rounded-br-xl z-20">
                             ARCHIVE RECORD #{selectedDream._id?.toString().slice(-4).toUpperCase() || 'UNKNOWN'}

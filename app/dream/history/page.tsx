@@ -113,8 +113,14 @@ export default function JournalPage() {
 
             {/* Detail Modal (Bento) */}
             {selectedDream && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-white border-2 border-black rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row shadow-2xl relative text-black">
+                <div
+                    className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 cursor-pointer"
+                    onClick={() => setSelectedDream(null)}
+                >
+                    <div
+                        className="bg-white border-2 border-black rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row shadow-2xl relative text-black cursor-default"
+                        onClick={(e) => e.stopPropagation()}
+                    >
 
                         {/* Modal Header Bar */}
                         <div className="absolute top-0 left-0 w-full h-10 bg-primary/10 border-b border-primary/20 flex items-center justify-between px-4 z-20 pointer-events-none md:hidden">
