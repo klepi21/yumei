@@ -89,7 +89,7 @@ export default function RootLayout({
               "offers": {
                 "@type": "Offer",
                 "price": "0.00",
-                "priceCurrency": "USD"
+                "priceCurrency": "EUR"
               }
             })
           }}

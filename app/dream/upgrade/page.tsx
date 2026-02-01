@@ -27,7 +27,7 @@ export default function UpgradePage() {
                     <div className="mb-6">
                         <h3 className="font-black text-2xl uppercase italic">PULSE PACK</h3>
                         <div className="flex items-baseline gap-1 mt-2">
-                            <span className="text-4xl font-black">$9</span>
+                            <span className="text-4xl font-black">€9</span>
                             <span className="text-sm font-bold opacity-60">one-time</span>
                         </div>
                     </div>
@@ -50,7 +50,7 @@ export default function UpgradePage() {
                     <div className="mb-6">
                         <h3 className="font-black text-2xl uppercase italic">SYNAPSE PACK</h3>
                         <div className="flex items-baseline gap-1 mt-2">
-                            <span className="text-4xl font-black">$29</span>
+                            <span className="text-4xl font-black">€29</span>
                             <span className="text-sm font-bold opacity-60">one-time</span>
                         </div>
                     </div>
@@ -71,7 +71,7 @@ export default function UpgradePage() {
                     <div className="mb-6">
                         <h3 className="font-black text-2xl uppercase italic text-black">NEURAL ENGINE</h3>
                         <div className="flex items-baseline gap-1 mt-2">
-                            <span className="text-4xl font-black">$59</span>
+                            <span className="text-4xl font-black">€59</span>
                             <span className="text-sm font-bold opacity-80">one-time</span>
                         </div>
                     </div>
