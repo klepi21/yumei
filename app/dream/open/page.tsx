@@ -56,102 +56,131 @@ export default function OpenWorldPage() {
         <div
             ref={scrollContainerRef}
             onScroll={handleScroll}
-            className="h-full w-full overflow-y-auto snap-y snap-mandatory bg-black scrollbar-hide"
+            className="h-full w-full overflow-y-auto snap-y snap-mandatory bg-[#F2EDE9] scrollbar-hide selection:bg-[#A34941] selection:text-white"
         >
+            {/* Background Texture Overlay (Paper/Noise) */}
+            <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
+
             {comics.map((comic) => (
                 <section
                     key={comic._id}
-                    className="h-full w-full snap-start snap-always relative flex flex-col md:flex-row bg-[#F7F3F0] overflow-hidden border-b-2 border-black/10"
+                    className="h-full w-full snap-start snap-always relative flex flex-col md:flex-row bg-transparent overflow-hidden border-b border-black/5"
                 >
                     {/* Main Comic Image (Left) */}
-                    <div className="flex-1 h-[70vh] md:h-full relative overflow-hidden bg-white/50 flex items-center justify-center p-4">
+                    <div className="flex-1 h-[65vh] md:h-full relative overflow-hidden flex items-center justify-center p-6 md:p-12">
+                        {/* Branding Logo (Floating) */}
+                        <div className="absolute top-8 left-8 z-20 flex items-center gap-2 opacity-80">
+                            <div className="w-8 h-8 rounded-full bg-[#A34941] flex items-center justify-center text-white font-black text-xs border border-black/10">Y</div>
+                            <span className="font-black tracking-tighter text-xl uppercase italic text-black">YUMEI</span>
+                        </div>
+
+                        {/* Decorative Kanji (Large Background) */}
+                        <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none">
+                            <span className="text-[40vw] font-black text-black leading-none">夢</span>
+                        </div>
+
                         {comic.comicImageUrl ? (
-                            <img
-                                src={comic.comicImageUrl}
-                                alt={comic.input}
-                                className="max-h-full max-w-full object-contain shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-black/5"
-                            />
+                            <div className="relative group">
+                                {/* Subtle outer frame */}
+                                <div className="absolute -inset-4 border border-black/5 rounded-sm opacity-50 pointer-events-none" />
+                                <img
+                                    src={comic.comicImageUrl}
+                                    alt={comic.input}
+                                    className="max-h-[80vh] max-w-full object-contain shadow-[0_40px_100px_rgba(0,0,0,0.15)] border-2 border-white transition-transform duration-700 group-hover:scale-[1.01]"
+                                />
+                                {/* Corner Accents */}
+                                <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-[#A34941]" />
+                                <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-[#A34941]" />
+                            </div>
                         ) : (
-                            <div className="text-muted-foreground font-mono text-xs uppercase italic opacity-20">Transmission Lost</div>
+                            <div className="flex flex-col items-center gap-4 opacity-20">
+                                <div className="w-20 h-20 border-2 border-dashed border-black rounded-full flex items-center justify-center animate-spin-slow">
+                                    <Loader2 className="w-8 h-8" />
+                                </div>
+                                <span className="font-mono text-[10px] tracking-[0.3em] uppercase">Transmission Lost</span>
+                            </div>
                         )}
 
-                        {/* Scroll Indicator (Mobile) */}
-                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 md:hidden animate-bounce text-black/20">
-                            <ChevronDown className="w-8 h-8" />
+                        {/* Mobile Scroll Indicator */}
+                        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 md:hidden animate-bounce text-black/30">
+                            <ChevronDown className="w-6 h-6" />
                         </div>
                     </div>
 
                     {/* Info Overlay (Right) */}
-                    <div className="w-full md:w-96 p-8 flex flex-col justify-between bg-white/30 backdrop-blur-sm md:border-l-2 md:border-black/5">
-                        <div className="space-y-8">
-                            <div className="flex flex-col gap-1">
-                                <span className="text-[10px] font-mono font-bold text-[#A34941] uppercase tracking-widest">NEURAL FRAGMENT</span>
-                                <h2 className="text-2xl font-black uppercase tracking-tighter leading-none italic truncate block">"{comic.input}"</h2>
+                    <div className="w-full md:w-[400px] p-8 md:p-12 flex flex-col justify-between bg-white/40 backdrop-blur-md md:border-l border-black/10 relative z-10">
+                        {/* Top Section */}
+                        <div className="space-y-12">
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 bg-[#A34941] rounded-full animate-pulse" />
+                                    <span className="text-[10px] font-mono font-black text-[#A34941] uppercase tracking-[0.2em]">Neural Fragment</span>
+                                </div>
+                                <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-[0.9] italic break-words text-black">
+                                    {comic.input}
+                                </h2>
                             </div>
 
-                            <div className="grid grid-cols-1 gap-6">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center border border-black/5">
-                                        <User className="w-5 h-5 opacity-40" />
-                                    </div>
-                                    <div>
-                                        <span className="block text-[10px] font-mono opacity-50 uppercase font-medium">CREATOR</span>
-                                        <span className="text-sm font-bold font-mono tracking-tight uppercase">USER.{comic.userId.slice(-6)}</span>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center border border-black/5">
-                                        <Palette className="w-5 h-5 opacity-40" />
-                                    </div>
-                                    <div>
-                                        <span className="block text-[10px] font-mono opacity-50 uppercase font-medium">STYLE ENGINE</span>
-                                        <span className="text-sm font-bold font-mono tracking-tight uppercase">{comic.style}</span>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center border border-black/5">
-                                        <Calendar className="w-5 h-5 opacity-40" />
-                                    </div>
-                                    <div>
-                                        <span className="block text-[10px] font-mono opacity-50 uppercase font-medium">TIMESTAMP</span>
-                                        <span className="text-sm font-bold font-mono tracking-tight uppercase">
-                                            {new Date(comic.createdAt).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}
-                                        </span>
-                                    </div>
-                                </div>
+                            {/* Meta Grid */}
+                            <div className="space-y-8 pt-8 border-t border-black/5">
+                                <MetaItem label="Creator" value={`AGENT.${comic.userId.slice(-6).toUpperCase()}`} icon={User} />
+                                <MetaItem label="Style Engine" value={comic.style} icon={Palette} />
+                                <MetaItem label="Neural Sync" value={new Date(comic.createdAt).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })} icon={Calendar} />
                             </div>
                         </div>
 
-                        <div className="mt-8 pt-8 border-t border-black/5 flex flex-col gap-4">
-                            <div className="flex items-center justify-between opacity-30 font-mono text-[10px] font-bold uppercase tracking-widest">
-                                <span>SYSTEM VERSION</span>
-                                <span>YV.2.0.4</span>
+                        {/* Bottom Section */}
+                        <div className="mt-12 space-y-6">
+                            {/* Technical Barcode Decor */}
+                            <div className="flex gap-[1px] h-6 items-end opacity-20">
+                                {[...Array(30)].map((_, i) => (
+                                    <div key={i} className={`bg-black w-[1px] h-${(i % 3 === 0 ? 'full' : i % 2 === 0 ? '2/3' : '1/2')}`} />
+                                ))}
                             </div>
-                            <div className="h-1 bg-black/5 rounded-full overflow-hidden">
-                                <div className="h-full bg-[#A34941] w-1/3 animate-pulse" />
+
+                            <div className="flex flex-col gap-1">
+                                <div className="flex justify-between items-center text-[9px] font-mono font-bold text-black/40 tracking-widest uppercase">
+                                    <span>SYSTEM.CORE.V2</span>
+                                    <span>INSTANT_ACT</span>
+                                </div>
+                                <div className="h-[2px] w-full bg-black/5 rounded-full overflow-hidden">
+                                    <div className="h-full bg-[#A34941] w-[65%] animate-pulse" />
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Navigation Controls (Desktop Sidebar Style) */}
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden lg:flex flex-col gap-4 items-center z-50">
+                    {/* Navigation Arrows (Desktop) */}
+                    <div className="absolute right-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col gap-4 items-center z-50">
                         <button
                             onClick={() => scrollContainerRef.current?.scrollBy({ top: -window.innerHeight, behavior: 'smooth' })}
-                            className="w-10 h-10 rounded-full bg-white/80 border border-black/10 flex items-center justify-center hover:bg-white hover:scale-110 transition-all text-black/40 hover:text-black"
+                            className="w-12 h-12 rounded-full bg-white/90 border border-black/10 flex items-center justify-center hover:bg-white hover:scale-110 shadow-sm transition-all text-black/40 hover:text-[#A34941]"
                         >
                             <ChevronUp className="w-6 h-6" />
                         </button>
                         <button
                             onClick={() => scrollContainerRef.current?.scrollBy({ top: window.innerHeight, behavior: 'smooth' })}
-                            className="w-10 h-10 rounded-full bg-white/80 border border-black/10 flex items-center justify-center hover:bg-white hover:scale-110 transition-all text-black/40 hover:text-black"
+                            className="w-12 h-12 rounded-full bg-white/90 border border-black/10 flex items-center justify-center hover:bg-white hover:scale-110 shadow-sm transition-all text-black/40 hover:text-[#A34941]"
                         >
                             <ChevronDown className="w-6 h-6" />
                         </button>
                     </div>
                 </section>
             ))}
+        </div>
+    );
+}
+
+function MetaItem({ label, value, icon: Icon }: { label: string; value: string; icon: any }) {
+    return (
+        <div className="flex items-center gap-4 group">
+            <div className="w-12 h-12 rounded-sm bg-black/5 flex items-center justify-center border border-black/5 group-hover:bg-[#A34941]/5 group-hover:border-[#A34941]/20 transition-colors">
+                <Icon className="w-5 h-5 opacity-40 group-hover:opacity-80 group-hover:text-[#A34941] transition-all" />
+            </div>
+            <div className="flex flex-col">
+                <span className="text-[9px] font-mono font-bold opacity-40 uppercase tracking-widest leading-none mb-1">{label}</span>
+                <span className="text-sm font-black font-mono tracking-tighter uppercase text-black leading-none">{value}</span>
+            </div>
         </div>
     );
 }
