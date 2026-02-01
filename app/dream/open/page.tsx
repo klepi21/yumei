@@ -100,7 +100,7 @@ export default function OpenWorldPage() {
             <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-0 bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
 
             {/* Main Comic Display (Left) */}
-            <div className="flex-1 relative z-10 flex items-center justify-center p-4 md:p-12 overflow-hidden border-b md:border-b-0 md:border-r border-black/10">
+            <div className="flex-1 relative z-10 flex items-start justify-center pt-24 pb-32 md:pt-32 md:pb-40 px-4 md:px-12 overflow-hidden border-b md:border-b-0 md:border-r border-black/10">
                 {/* Branding Logo */}
                 <div className="absolute top-8 left-8 flex items-center gap-3 opacity-60">
                     <div className="w-8 h-8 rounded-full bg-[#A34941] flex items-center justify-center text-white font-black text-xs">Y</div>
@@ -112,8 +112,8 @@ export default function OpenWorldPage() {
                     <span className="text-[50vw] font-black text-black leading-none transform translate-y-10">夢</span>
                 </div>
 
-                {/* IMAGE CONTAINER - GUARANTEED VISIBILITY */}
-                <div className="relative w-full h-full flex items-center justify-center max-h-[85vh]">
+                {/* IMAGE CONTAINER - SHIFTED UPWARDS */}
+                <div className="relative w-full h-full flex items-start justify-center max-h-[75vh]">
                     {displayUrl ? (
                         <div className="relative group animate-in fade-in zoom-in duration-500">
                             {/* Frame Effects */}
@@ -122,13 +122,13 @@ export default function OpenWorldPage() {
                             <img
                                 src={displayUrl}
                                 alt={currentComic.input}
-                                className="max-h-[80vh] max-w-full object-contain shadow-[0_50px_100px_rgba(0,0,0,0.2)] border-8 border-white relative z-10"
+                                className="max-h-[75vh] max-w-full object-contain shadow-[0_50px_100px_rgba(0,0,0,0.25)] border-8 border-white relative z-10"
                                 key={currentComic._id} // Force re-render on image change
                             />
 
-                            {/* Red Corner Accents */}
-                            <div className="absolute -top-2 -left-2 w-8 h-8 border-t-4 border-l-4 border-[#A34941] z-20" />
-                            <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-4 border-r-4 border-[#A34941] z-20" />
+                            {/* Red Corner Accents - Bolder */}
+                            <div className="absolute -top-3 -left-3 w-12 h-12 border-t-[6px] border-l-[6px] border-[#A34941] z-20" />
+                            <div className="absolute -bottom-3 -right-3 w-12 h-12 border-b-[6px] border-r-[6px] border-[#A34941] z-20" />
                         </div>
                     ) : (
                         <div className="space-y-4 opacity-10 flex flex-col items-center">
