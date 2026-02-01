@@ -150,7 +150,10 @@ export default function Home() {
         </div>
 
         {/* 4. MODE TILE (Solid Cyber Grey) */}
-        <div className="bg-[#969696] text-black p-6 rounded-[2rem] flex flex-col justify-between border-2 border-black/10 relative overflow-hidden group">
+        <Link
+          href="/dream/open"
+          className="bg-[#969696] text-black p-6 rounded-[2rem] flex flex-col justify-between border-2 border-black/10 relative overflow-hidden group hover:scale-[1.02] transition-transform shadow-lg cursor-pointer"
+        >
           {/* Background Comic Layer */}
           <div className="absolute inset-0 z-0 opacity-20 grayscale group-hover:grayscale-0 group-hover:opacity-40 transition-all duration-700">
             <img
@@ -162,16 +165,13 @@ export default function Home() {
           </div>
 
           <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 pointer-events-none z-10" />
-          {/* Sticker */}
-
-
           <Globe className="w-10 h-10 opacity-70 mb-auto relative z-20" />
 
           <div className="relative z-20">
             <h3 className="font-black text-2xl uppercase text-black">Open<br />World</h3>
             <p className="text-xs font-mono mt-1 opacity-70">Join the collective story stream.</p>
           </div>
-        </div>
+        </Link>
 
         {/* 5. FOOTER / INFO TILE (Wide, Technical) */}
         <div className="md:col-span-3 lg:col-span-4 bg-card text-card-foreground rounded-[2rem] p-8 flex flex-col md:flex-row items-center justify-between gap-6 border-2 border-border relative overflow-hidden group">

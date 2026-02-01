@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
-import { Home, Calendar, Settings, LogOut, Terminal, Cpu, Ghost, Loader2 } from 'lucide-react';
+import { Home, Calendar, Settings, LogOut, Terminal, Cpu, Ghost, Loader2, Globe } from 'lucide-react';
 import SubscriptionCard from '@/components/dashboard/subscription-card';
 
 export default function DreamLayout({
@@ -59,6 +59,7 @@ export default function DreamLayout({
                         <div className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest pl-2 mb-2">Main Sequence</div>
                         <NavItem href="/dream" icon={Cpu} label="INPUT TERMINAL" />
                         <NavItem href="/dream/history" icon={Calendar} label="MEMORY ARCHIVE" />
+                        <NavItem href="/dream/open" icon={Globe} label="OPEN WORLD" />
                         <NavItem href="/dream/settings" icon={Settings} label="SYSTEM CONFIG" />
                     </nav>
                 </div>
